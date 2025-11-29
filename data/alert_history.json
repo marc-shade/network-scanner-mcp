@@ -2933,6 +2933,16 @@
         "mac": "84:E3:42:8F:AC:98",
         "vendor": "Unknown"
       }
+    },
+    {
+      "timestamp": "2025-11-29T16:26:55.892014",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.209, MAC 84:E3:42:8F:AC:98, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.209",
+        "mac": "84:E3:42:8F:AC:98",
+        "vendor": "Unknown"
+      }
     }
   ]
 }
