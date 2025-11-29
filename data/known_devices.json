@@ -1,7 +1,7 @@
 {
   "devices": {
-    "1C:1D:D3:EB:A8:08": {"label": "completeu-server", "type": "trusted"},
-    "68:5B:35:8F:49:F9": {"label": "mac-mini", "type": "trusted"},
+    "1C:1D:D3:EB:A8:08": {"label": "<HOSTNAME>", "type": "trusted"},
+    "68:5B:35:8F:49:F9": {"label": "<HOSTNAME>", "type": "trusted"},
     "48:5D:36:B6:73:AF": {"label": "Verizon Router", "type": "trusted"},
     "F8:A2:6D:99:B2:23": {"label": "Canon Printer", "type": "iot"},
     "D8:07:B6:AF:E2:8F": {"label": "TP-Link", "type": "iot"},
