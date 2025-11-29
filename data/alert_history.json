@@ -1,0 +1,2070 @@
+{
+  "alerts": [
+    {
+      "timestamp": "2025-11-28T13:59:04.489480",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.1, MAC 48:5D:36:B6:73:AF, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.1",
+        "mac": "48:5D:36:B6:73:AF",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:04.938628",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.16, MAC A4:FC:14:00:99:9C, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.16",
+        "mac": "A4:FC:14:00:99:9C",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:05.356887",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:05.842204",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.26, MAC CA:9F:F5:2D:30:65, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.26",
+        "mac": "CA:9F:F5:2D:30:65",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:06.257258",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.36, MAC 14:98:77:3D:54:56, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.36",
+        "mac": "14:98:77:3D:54:56",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:06.741639",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.12, MAC 04:99:B9:9D:EA:A0, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.12",
+        "mac": "04:99:B9:9D:EA:A0",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:07.158542",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.76, MAC 2A:44:F1:78:D4:33, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.76",
+        "mac": "2A:44:F1:78:D4:33",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:07.660203",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:08.241411",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.93, MAC B4:17:A8:CC:AD:74, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.93",
+        "mac": "B4:17:A8:CC:AD:74",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:08.755647",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.161, MAC F8:A2:6D:99:B2:23, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.161",
+        "mac": "F8:A2:6D:99:B2:23",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:09.243611",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.167, MAC C6:41:1E:72:AE:D0, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.167",
+        "mac": "C6:41:1E:72:AE:D0",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:09.652352",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.168, MAC A8:60:B6:20:64:F3, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.168",
+        "mac": "A8:60:B6:20:64:F3",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:10.145254",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.172, MAC 00:E0:4C:68:0F:B9, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.172",
+        "mac": "00:E0:4C:68:0F:B9",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:10.641737",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.186, MAC 1C:1D:D3:EB:A8:08, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.186",
+        "mac": "1C:1D:D3:EB:A8:08",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:11.260396",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.199, MAC D8:07:B6:AF:E2:8F, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.199",
+        "mac": "D8:07:B6:AF:E2:8F",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:11.755234",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.221, MAC 38:94:ED:67:D1:66, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.221",
+        "mac": "38:94:ED:67:D1:66",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:12.243184",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.233, MAC 68:5B:35:8F:49:F9, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.233",
+        "mac": "68:5B:35:8F:49:F9",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:12.657553",
+      "type": "node_offline",
+      "message": "Cluster node offline: mac-studio (orchestrator) at 192.168.1.79",
+      "data": {
+        "ip": "192.168.1.79",
+        "name": "mac-studio (orchestrator)"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:13.144421",
+      "type": "node_offline",
+      "message": "Cluster node offline: macpro51 (builder) at 192.168.1.87",
+      "data": {
+        "ip": "192.168.1.87",
+        "name": "macpro51 (builder)"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:13.557438",
+      "type": "node_offline",
+      "message": "Cluster node offline: macpro51-alt (builder) at 192.168.1.183",
+      "data": {
+        "ip": "192.168.1.183",
+        "name": "macpro51-alt (builder)"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T13:59:14.049302",
+      "type": "node_offline",
+      "message": "Cluster node offline: macbook-air-m3 (coordinator) at 192.168.1.55",
+      "data": {
+        "ip": "192.168.1.55",
+        "name": "macbook-air-m3 (coordinator)"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T14:09:18.594075",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T14:14:21.052117",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T14:34:29.622217",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T14:54:38.126713",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T14:54:38.459695",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T14:59:41.113062",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:04:43.613355",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:09:45.989226",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:19:50.491328",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:24:52.888177",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:29:55.278660",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:39:59.720545",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:45:02.085477",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:50:04.492730",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:50:04.852425",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T15:55:07.378569",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:00:09.836768",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:05:12.510985",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:05:12.848450",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:10:15.311370",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:10:15.652907",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:25:22.409569",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:30:24.761429",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:30:25.161413",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:40:29.717235",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:45:32.084589",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:45:32.454881",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:50:34.957196",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T16:55:37.392322",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:00:39.812249",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:05:42.215251",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:15:46.592205",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:20:48.984315",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:25:51.373699",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T17:56:04.222105",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T18:16:12.654090",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T18:36:21.170494",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T18:46:25.682754",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:06:34.292526",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:06:34.653721",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:11:37.351037",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:21:41.819068",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:31:46.337474",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:36:48.775342",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:36:49.154879",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:41:51.688586",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:41:52.057114",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:46:54.579367",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:51:56.963205",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:51:57.344640",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T19:56:59.780859",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:02:02.230312",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:02:02.638710",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:27:13.194640",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:32:15.605218",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:37:17.942315",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:42:20.454184",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:47:22.872873",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:52:25.262192",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T20:57:27.687644",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T21:22:38.319378",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T21:47:49.141322",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T21:47:49.560950",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T21:52:52.164617",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T21:57:54.576602",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:07:59.028934",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:18:03.573045",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:23:06.145831",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:28:08.680760",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:33:11.246166",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:38:13.832465",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:38:14.238669",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:43:16.802492",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:43:17.151592",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:48:19.523480",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:48:19.945579",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:58:24.426217",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T22:58:24.841189",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T23:03:27.278985",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T23:13:31.677560",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T23:38:42.263046",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T23:43:44.573738",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-28T23:48:46.886504",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T00:03:53.341160",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T00:13:57.793484",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T00:19:00.189962",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T00:34:06.604981",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T00:44:10.903354",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T00:49:13.328940",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T01:04:19.811093",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T01:04:20.158808",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T01:24:28.606570",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T01:54:41.228345",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:04:45.773618",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:04:46.139077",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:09:48.558273",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:19:52.993478",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:19:53.347103",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:24:55.855291",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:29:58.256279",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:40:02.627216",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:45:04.981274",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T02:50:07.334300",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:15:17.893011",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:25:22.153542",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:30:24.587185",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:40:28.867266",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:40:29.242595",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:45:31.773122",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T03:55:36.165885",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:30:50.898914",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:40:55.314363",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:40:55.638885",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:45:57.984939",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:45:58.345164",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:51:00.748279",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:51:01.138595",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:56:03.527632",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T04:56:03.939909",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T05:21:14.646245",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T05:31:19.101068",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T05:36:21.303366",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T05:46:25.562561",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T05:51:27.956228",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:16:38.356353",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:36:46.932909",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:41:49.280073",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:46:51.660645",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:56:56.054274",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T06:56:56.362283",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:01:58.873595",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:01:59.240079",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:32:11.947853",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:37:14.349104",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:42:16.660233",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:47:19.064572",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:47:19.437974",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T07:52:21.715350",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:02:26.101296",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:17:32.460597",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:22:34.862924",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:27:37.285247",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:32:39.758476",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:37:42.189025",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:37:42.557987",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:42:45.074164",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:42:45.451333",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:47:47.886364",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:47:48.354028",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T08:52:50.861800",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:02:55.359673",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:12:59.800982",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:18:02.283213",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:23:04.764317",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:28:07.200993",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:28:07.541732",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:33:10.032513",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:33:10.547885",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:43:15.396351",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:48:18.379477",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T09:48:18.841601",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:03:25.463731",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:08:27.951076",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:13:30.464207",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:23:34.946437",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:23:35.438254",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:28:37.951015",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:33:40.474329",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:33:40.850815",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:38:43.507384",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:48:48.250600",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:48:48.741895",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:53:51.242886",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:53:51.761118",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T10:58:54.256920",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:03:56.681593",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:08:59.069693",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:08:59.460257",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:14:02.058828",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:14:02.654914",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:19:05.357346",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:19:05.849111",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:24:08.539575",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:29:11.254468",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:34:13.787930",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T11:49:20.366662",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    }
+  ]
+}

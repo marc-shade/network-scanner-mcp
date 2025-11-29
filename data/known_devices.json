@@ -1,0 +1,21 @@
+{
+  "devices": {
+    "1C:1D:D3:EB:A8:08": {"label": "completeu-server", "type": "trusted"},
+    "68:5B:35:8F:49:F9": {"label": "mac-mini", "type": "trusted"},
+    "48:5D:36:B6:73:AF": {"label": "Verizon Router", "type": "trusted"},
+    "F8:A2:6D:99:B2:23": {"label": "Canon Printer", "type": "iot"},
+    "D8:07:B6:AF:E2:8F": {"label": "TP-Link", "type": "iot"},
+    "38:94:ED:67:D1:66": {"label": "NETGEAR", "type": "iot"},
+    "B4:17:A8:CC:AD:74": {"label": "Meta Quest VR", "type": "iot"},
+    "A4:FC:14:00:99:9C": {"label": "Apple Device 1", "type": "trusted"},
+    "14:98:77:3D:54:56": {"label": "Apple Device 2", "type": "trusted"},
+    "04:99:B9:9D:EA:A0": {"label": "Apple Device 3", "type": "trusted"},
+    "A8:60:B6:20:64:F3": {"label": "Apple Device 4", "type": "trusted"},
+    "00:E0:4C:68:0F:B9": {"label": "Realtek NIC", "type": "trusted"},
+    "CA:9F:F5:2D:30:65": {"label": "VM/Private MAC 1", "type": "guest"},
+    "C6:41:1E:72:AE:D0": {"label": "VM/Private MAC 2", "type": "guest"},
+    "DA:26:C1:B9:D0:52": {"label": "VM/Private MAC 3", "type": "guest"},
+    "2A:44:F1:78:D4:33": {"label": "VM/Private MAC 4", "type": "guest"},
+    "70:08:94:C2:70:A3": {"label": "Unknown Device", "type": "guest"}
+  }
+}
