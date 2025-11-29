@@ -99,15 +99,20 @@ Feeds discovered IPs to Nuclei for vulnerability scanning.
 - Root access for ARP scanning (or arp-scan with sudo)
 - Network interface access
 
-## Cluster Nodes (Pre-configured)
+## Cluster Nodes (Configurable)
 
-| IP | Name | Role |
-|----|------|------|
-| 192.168.1.79 | mac-studio | Orchestrator |
-| 192.168.1.87 | macpro51 | Builder |
-| 192.168.1.233 | mac-mini | Files |
-| 192.168.1.55 | macbook-air-m3 | Coordinator |
-| 192.168.1.186 | completeu-server | Inference |
+Cluster nodes are loaded from configuration:
+- Environment variable `CLUSTER_NODES_JSON`
+- Configuration file `~/.claude/cluster-nodes.json`
+
+Default node roles:
+| Role | Description |
+|------|-------------|
+| orchestrator | Coordination, monitoring, routing |
+| builder | Compilation, testing, containers |
+| files | File storage and management |
+| coordinator | Multi-node coordination |
+| inference | AI inference and GPU workloads |
 
 ---
 
