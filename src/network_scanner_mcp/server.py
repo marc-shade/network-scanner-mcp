@@ -23,21 +23,51 @@ from typing import Optional
 from fastmcp import FastMCP
 import os
 
-# Data storage path
-DATA_DIR = Path(os.path.join(os.environ.get("AGENTIC_SYSTEM_PATH", "/mnt/agentic-system"), "databases/network-scanner"))
+# Data storage path - configurable via environment
+DATA_DIR = Path(os.environ.get("NETWORK_SCANNER_DATA_DIR",
+    os.path.join(os.environ.get("AGENTIC_SYSTEM_PATH", str(Path.home())), "databases/network-scanner")))
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 DEVICE_HISTORY_FILE = DATA_DIR / "device_history.json"
 KNOWN_DEVICES_FILE = DATA_DIR / "known_devices.json"
+CLUSTER_CONFIG_FILE = DATA_DIR / "cluster_nodes.json"
 
-# Known cluster nodes for reference
-CLUSTER_NODES = {
-    "192.168.1.79": {"name": "mac-studio", "role": "orchestrator", "type": "cluster_node"},  # TODO: Move to config/env var
-    "192.168.1.87": {"name": "macpro51", "role": "builder", "type": "cluster_node"},  # TODO: Move to config/env var
-    "192.168.1.183": {"name": "macpro51-alt", "role": "builder", "type": "cluster_node"},  # TODO: Move to config/env var
-    "192.168.1.233": {"name": "mac-mini", "role": "files", "type": "cluster_node"},  # TODO: Move to config/env var
-    "192.168.1.55": {"name": "macbook-air-m3", "role": "coordinator", "type": "cluster_node"},  # TODO: Move to config/env var
-    "192.168.1.186": {"name": "completeu-server", "role": "inference", "type": "cluster_node"},  # TODO: Move to config/env var
-}
+
+def _load_cluster_nodes() -> dict:
+    """
+    Load cluster node configuration from file or environment.
+
+    Configuration sources (in priority order):
+    1. CLUSTER_NODES_JSON environment variable (JSON string)
+    2. cluster_nodes.json file in data directory
+    3. Empty dict (no predefined cluster nodes)
+
+    Example cluster_nodes.json:
+    {
+        "10.0.0.1": {"name": "node-1", "role": "orchestrator", "type": "cluster_node"},
+        "10.0.0.2": {"name": "node-2", "role": "worker", "type": "cluster_node"}
+    }
+    """
+    # Try environment variable first
+    env_config = os.environ.get("CLUSTER_NODES_JSON")
+    if env_config:
+        try:
+            return json.loads(env_config)
+        except json.JSONDecodeError:
+            pass
+
+    # Try config file
+    if CLUSTER_CONFIG_FILE.exists():
+        try:
+            return json.loads(CLUSTER_CONFIG_FILE.read_text())
+        except (json.JSONDecodeError, IOError):
+            pass
+
+    # Return empty - no predefined cluster nodes
+    return {}
+
+
+# Load cluster nodes from configuration
+CLUSTER_NODES = _load_cluster_nodes()
 
 # Initialize FastMCP server
 mcp = FastMCP("network-scanner")
@@ -94,7 +124,8 @@ async def _scan_arp(subnet: Optional[str] = None) -> list[dict]:
             parts = local_ip.split(".")
             subnet = f"{parts[0]}.{parts[1]}.{parts[2]}.0/24"
         except Exception:
-            subnet = "192.168.1.0/24"  # TODO: Move to config/env var
+            # Default to common home network subnet, configurable via env
+            subnet = os.environ.get("DEFAULT_SCAN_SUBNET", "192.168.1.0/24")
 
     devices = []
     timestamp = datetime.now().isoformat()
@@ -169,7 +200,7 @@ async def scan_network(subnet: Optional[str] = None) -> str:
     Scan the local network for all connected devices using ARP.
 
     Args:
-        subnet: Subnet to scan (e.g., 192.168.1.0/24). Defaults to local subnet.  # TODO: Move to config/env var
+        subnet: Subnet to scan (e.g., 10.0.0.0/24). Defaults to auto-detected local subnet.
 
     Returns:
         JSON with discovered devices including IP, MAC, and vendor.

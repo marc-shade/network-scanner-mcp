@@ -17,30 +17,70 @@ from pathlib import Path
 from typing import Optional
 import aiohttp
 
-# Configuration
-SCAN_INTERVAL_SECONDS = 300  # 5 minutes
-VOICE_ALERTS_ENABLED = True
-NODE_CHAT_ALERTS_ENABLED = True
-ALERT_ON_NEW_DEVICES = True
-ALERT_ON_CLUSTER_NODE_DOWN = True
+# Configuration - all settings configurable via environment
+SCAN_INTERVAL_SECONDS = int(os.environ.get("SCAN_INTERVAL_SECONDS", "300"))  # 5 minutes
+VOICE_ALERTS_ENABLED = os.environ.get("VOICE_ALERTS_ENABLED", "true").lower() == "true"
+NODE_CHAT_ALERTS_ENABLED = os.environ.get("NODE_CHAT_ALERTS_ENABLED", "true").lower() == "true"
+ALERT_ON_NEW_DEVICES = os.environ.get("ALERT_ON_NEW_DEVICES", "true").lower() == "true"
+ALERT_ON_CLUSTER_NODE_DOWN = os.environ.get("ALERT_ON_CLUSTER_NODE_DOWN", "true").lower() == "true"
 
-# Paths
-DATA_DIR = Path(os.path.join(os.environ.get("AGENTIC_SYSTEM_PATH", "/mnt/agentic-system"), "mcp-servers/network-scanner-mcp/data"))
+# Paths - configurable via environment
+DATA_DIR = Path(os.environ.get("NETWORK_SCANNER_DATA_DIR",
+    os.path.join(os.environ.get("AGENTIC_SYSTEM_PATH", str(Path.home())), "mcp-servers/network-scanner-mcp/data")))
 ALERT_LOG = DATA_DIR / "alert_history.json"
 KNOWN_DEVICES_FILE = DATA_DIR / "known_devices.json"
+CLUSTER_CONFIG_FILE = DATA_DIR / "cluster_nodes.json"
 
 # Voice MCP endpoint (if running as HTTP)
-VOICE_MCP_SOCKET = "/tmp/voice-mode.sock"
+VOICE_MCP_SOCKET = os.environ.get("VOICE_MCP_SOCKET", "/tmp/voice-mode.sock")
 
-# Cluster nodes to monitor
-CLUSTER_NODES = {
-    "192.168.1.79": "mac-studio (orchestrator)",  # TODO: Move to config/env var
-    "192.168.1.87": "macpro51 (builder)",  # TODO: Move to config/env var
-    "192.168.1.183": "macpro51-alt (builder)",  # TODO: Move to config/env var
-    "192.168.1.233": "mac-mini (files)",  # TODO: Move to config/env var
-    "192.168.1.55": "macbook-air-m3 (coordinator)",  # TODO: Move to config/env var
-    "192.168.1.186": "completeu-server (inference)",  # TODO: Move to config/env var
-}
+
+def _load_cluster_nodes() -> dict:
+    """
+    Load cluster node configuration from file or environment.
+
+    Configuration sources (in priority order):
+    1. CLUSTER_NODES_JSON environment variable (JSON string)
+    2. cluster_nodes.json file in data directory
+    3. Empty dict (no predefined cluster nodes)
+
+    Example cluster_nodes.json:
+    {
+        "10.0.0.1": "node-1 (orchestrator)",
+        "10.0.0.2": "node-2 (worker)"
+    }
+    """
+    # Try environment variable first
+    env_config = os.environ.get("CLUSTER_NODES_JSON")
+    if env_config:
+        try:
+            return json.loads(env_config)
+        except json.JSONDecodeError:
+            pass
+
+    # Try config file
+    if CLUSTER_CONFIG_FILE.exists():
+        try:
+            data = json.loads(CLUSTER_CONFIG_FILE.read_text())
+            # Support both dict formats: {"ip": "name"} or {"ip": {"name": ..., "role": ...}}
+            result = {}
+            for ip, info in data.items():
+                if isinstance(info, str):
+                    result[ip] = info
+                elif isinstance(info, dict):
+                    name = info.get("name", "unknown")
+                    role = info.get("role", "node")
+                    result[ip] = f"{name} ({role})"
+            return result
+        except (json.JSONDecodeError, IOError):
+            pass
+
+    # Return empty - no predefined cluster nodes
+    return {}
+
+
+# Cluster nodes to monitor - loaded from configuration
+CLUSTER_NODES = _load_cluster_nodes()
 
 
 def load_json(path: Path) -> dict:
