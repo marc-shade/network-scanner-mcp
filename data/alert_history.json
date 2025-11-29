@@ -3713,6 +3713,24 @@
         "mac": "32:4E:F8:DC:63:0A",
         "vendor": "Unknown"
       }
+    },
+    {
+      "timestamp": "2025-11-29T18:38:21.537461",
+      "type": "node_offline",
+      "message": "Cluster node offline: mac-mini (files) at 192.168.1.233",
+      "data": {
+        "ip": "192.168.1.233",
+        "name": "mac-mini (files)"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T18:38:21.947351",
+      "type": "node_offline",
+      "message": "Cluster node offline: completeu-server (inference) at 192.168.1.186",
+      "data": {
+        "ip": "192.168.1.186",
+        "name": "completeu-server (inference)"
+      }
     }
   ]
 }
