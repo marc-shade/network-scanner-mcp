@@ -3731,6 +3731,44 @@
         "ip": "192.168.1.186",
         "name": "completeu-server (inference)"
       }
+    },
+    {
+      "timestamp": "2025-11-29T19:18:26.509062",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.6, MAC AA:12:9D:27:2C:BD, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.6",
+        "mac": "AA:12:9D:27:2C:BD",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T19:18:26.860372",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.209, MAC 84:E3:42:8F:AC:98, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.209",
+        "mac": "84:E3:42:8F:AC:98",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T19:18:27.348865",
+      "type": "node_recovered",
+      "message": "Cluster node recovered: completeu-server (inference) at 192.168.1.186",
+      "data": {
+        "ip": "192.168.1.186",
+        "name": "completeu-server (inference)"
+      }
+    },
+    {
+      "timestamp": "2025-11-29T19:18:27.846365",
+      "type": "node_recovered",
+      "message": "Cluster node recovered: mac-mini (files) at 192.168.1.233",
+      "data": {
+        "ip": "192.168.1.233",
+        "name": "mac-mini (files)"
+      }
     }
   ]
 }
