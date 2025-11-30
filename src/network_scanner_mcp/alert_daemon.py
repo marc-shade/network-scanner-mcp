@@ -46,8 +46,8 @@ def _load_cluster_nodes() -> dict:
 
     Example cluster_nodes.json:
     {
-        "10.0.0.1": "node-1 (orchestrator)",
-        "10.0.0.2": "node-2 (worker)"
+        "192.0.2.25": "node-1 (orchestrator)",
+        "192.0.2.152": "node-2 (worker)"
     }
     """
     # Try environment variable first
