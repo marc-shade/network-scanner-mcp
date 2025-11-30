@@ -4629,6 +4629,16 @@
         "mac": "32:4E:F8:DC:63:0A",
         "vendor": "Unknown"
       }
+    },
+    {
+      "timestamp": "2025-11-29T23:40:49.178750",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.10, MAC 7E:A5:01:5A:3D:4A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.10",
+        "mac": "7E:A5:01:5A:3D:4A",
+        "vendor": "Unknown"
+      }
     }
   ]
 }
