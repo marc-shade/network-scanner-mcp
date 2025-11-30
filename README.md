@@ -24,8 +24,8 @@ Environmental awareness for the AGI cluster through network device discovery and
 ## Installation
 
 ```bash
-cd /mnt/agentic-system/mcp-servers/network-scanner-mcp
-source /mnt/agentic-system/.venv/bin/activate
+cd ${AGENTIC_SYSTEM_PATH:-/opt/agentic}/mcp-servers/network-scanner-mcp
+source ${AGENTIC_SYSTEM_PATH:-/opt/agentic}/.venv/bin/activate
 pip install -e .
 
 # Install system dependencies (Fedora)
@@ -40,9 +40,9 @@ Add to `~/.claude.json`:
 {
   "mcpServers": {
     "network-scanner": {
-      "command": "/mnt/agentic-system/.venv/bin/python",
+      "command": "${AGENTIC_SYSTEM_PATH:-/opt/agentic}/.venv/bin/python",
       "args": ["-m", "network_scanner_mcp.server"],
-      "cwd": "/mnt/agentic-system/mcp-servers/network-scanner-mcp/src"
+      "cwd": "${AGENTIC_SYSTEM_PATH:-/opt/agentic}/mcp-servers/network-scanner-mcp/src"
     }
   }
 }
@@ -74,13 +74,13 @@ get_cluster_nodes()
 get_unknown_devices()
 
 # Mark your phone as known
-mark_device_known(mac="AA:BB:CC:DD:EE:FF", label="Marc's iPhone")
+mark_device_known(mac="00:00:00:00:00:63", label="Marc's iPhone")
 ```
 
 ## Data Storage
 
-- Device history: `/mnt/agentic-system/databases/network-scanner/device_history.json`
-- Known devices: `/mnt/agentic-system/databases/network-scanner/known_devices.json`
+- Device history: `${AGENTIC_SYSTEM_PATH:-/opt/agentic}/databases/network-scanner/device_history.json`
+- Known devices: `${AGENTIC_SYSTEM_PATH:-/opt/agentic}/databases/network-scanner/known_devices.json`
 
 ## Integration
 
