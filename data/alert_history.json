@@ -6559,6 +6559,36 @@
         "mac": "22:99:73:11:52:EE",
         "vendor": "Unknown"
       }
+    },
+    {
+      "timestamp": "2025-11-30T09:46:17.868155",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.6, MAC AA:12:9D:27:2C:BD, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.6",
+        "mac": "AA:12:9D:27:2C:BD",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T09:46:18.442111",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.84, MAC 22:99:73:11:52:EE, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.84",
+        "mac": "22:99:73:11:52:EE",
+        "vendor": "Unknown"
+      }
+    },
+    {
+      "timestamp": "2025-11-30T09:46:19.043407",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.70, MAC 32:4E:F8:DC:63:0A, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.70",
+        "mac": "32:4E:F8:DC:63:0A",
+        "vendor": "Unknown"
+      }
     }
   ]
 }
