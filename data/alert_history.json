@@ -6099,6 +6099,16 @@
         "mac": "AA:12:9D:27:2C:BD",
         "vendor": "Unknown"
       }
+    },
+    {
+      "timestamp": "2025-11-30T07:50:07.986914",
+      "type": "new_device",
+      "message": "Alert! New device detected on network: 192.168.1.6, MAC AA:12:9D:27:2C:BD, vendor Unknown",
+      "data": {
+        "ip": "192.168.1.6",
+        "mac": "AA:12:9D:27:2C:BD",
+        "vendor": "Unknown"
+      }
     }
   ]
 }
