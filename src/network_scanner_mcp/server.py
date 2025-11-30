@@ -43,8 +43,8 @@ def _load_cluster_nodes() -> dict:
 
     Example cluster_nodes.json:
     {
-        "192.0.2.25": {"name": "node-1", "role": "orchestrator", "type": "cluster_node"},
-        "192.0.2.152": {"name": "node-2", "role": "worker", "type": "cluster_node"}
+        "10.0.0.1": {"name": "node-1", "role": "orchestrator", "type": "cluster_node"},
+        "10.0.0.2": {"name": "node-2", "role": "worker", "type": "cluster_node"}
     }
     """
     # Try environment variable first
@@ -125,7 +125,7 @@ async def _scan_arp(subnet: Optional[str] = None) -> list[dict]:
             subnet = f"{parts[0]}.{parts[1]}.{parts[2]}.0/24"
         except Exception:
             # Default to common home network subnet, configurable via env
-            subnet = os.environ.get("DEFAULT_SCAN_SUBNET", "192.0.2.44/24")
+            subnet = os.environ.get("DEFAULT_SCAN_SUBNET", "192.168.1.0/24")
 
     devices = []
     timestamp = datetime.now().isoformat()
@@ -200,7 +200,7 @@ async def scan_network(subnet: Optional[str] = None) -> str:
     Scan the local network for all connected devices using ARP.
 
     Args:
-        subnet: Subnet to scan (e.g., 192.0.2.40/24). Defaults to auto-detected local subnet.
+        subnet: Subnet to scan (e.g., 10.0.0.0/24). Defaults to auto-detected local subnet.
 
     Returns:
         JSON with discovered devices including IP, MAC, and vendor.
