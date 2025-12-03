@@ -1,306 +1,601 @@
 #!/usr/bin/env python3
 """
 Network Scanner Alert Daemon
-Monitors network for new devices and alerts via voice/node-chat.
 
-Run as: python alert_daemon.py
+Monitors network for new devices and cluster node status changes.
+Sends alerts via:
+- Voice synthesis (edge-tts)
+- Node-chat MCP (cluster broadcast)
+- Log files
+
+Run as standalone: python -m network_scanner_mcp.alert_daemon
 Or install as systemd service for continuous monitoring.
 """
 
 import asyncio
 import json
-import subprocess
-import sys
+import logging
 import os
+import sys
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
-import aiohttp
 
-# Configuration - all settings configurable via environment
-SCAN_INTERVAL_SECONDS = int(os.environ.get("SCAN_INTERVAL_SECONDS", "300"))  # 5 minutes
-VOICE_ALERTS_ENABLED = os.environ.get("VOICE_ALERTS_ENABLED", "true").lower() == "true"
-NODE_CHAT_ALERTS_ENABLED = os.environ.get("NODE_CHAT_ALERTS_ENABLED", "true").lower() == "true"
-ALERT_ON_NEW_DEVICES = os.environ.get("ALERT_ON_NEW_DEVICES", "true").lower() == "true"
-ALERT_ON_CLUSTER_NODE_DOWN = os.environ.get("ALERT_ON_CLUSTER_NODE_DOWN", "true").lower() == "true"
+try:
+    import aiohttp
+except ImportError:
+    aiohttp = None
 
-# Paths - configurable via environment
-DATA_DIR = Path(os.environ.get("NETWORK_SCANNER_DATA_DIR",
-    os.path.join(os.environ.get("AGENTIC_SYSTEM_PATH", str(Path.home())), "mcp-servers/network-scanner-mcp/data")))
+from .utils import (
+    ClusterNodeConfig,
+    get_config_value,
+    get_data_dir,
+    get_timestamp,
+    load_cluster_nodes,
+    load_json_file,
+    normalize_mac,
+    save_json_file,
+    setup_logging,
+    detect_network_interface,
+)
+from .scanner import arp_scan, ping_hosts
+
+# =============================================================================
+# Configuration
+# =============================================================================
+
+# Configurable settings via environment
+SCAN_INTERVAL_SECONDS = get_config_value("SCAN_INTERVAL_SECONDS", 300, int)
+VOICE_ALERTS_ENABLED = get_config_value("VOICE_ALERTS_ENABLED", True, bool)
+NODE_CHAT_ALERTS_ENABLED = get_config_value("NODE_CHAT_ALERTS_ENABLED", True, bool)
+ALERT_ON_NEW_DEVICES = get_config_value("ALERT_ON_NEW_DEVICES", True, bool)
+ALERT_ON_CLUSTER_NODE_DOWN = get_config_value("ALERT_ON_CLUSTER_NODE_DOWN", True, bool)
+MAX_ALERT_HISTORY = get_config_value("MAX_ALERT_HISTORY", 1000, int)
+
+# Voice settings
+VOICE_NAME = get_config_value("TTS_VOICE", "en-IE-EmilyNeural", str)
+
+# Node-chat settings
+NODE_CHAT_SOCKET = get_config_value("NODE_CHAT_SOCKET", "/tmp/node-chat-mcp.sock", str)
+NODE_CHAT_HTTP_URL = get_config_value("NODE_CHAT_HTTP_URL", "http://localhost:8765", str)
+
+# Paths
+DATA_DIR = get_data_dir()
 ALERT_LOG = DATA_DIR / "alert_history.json"
 KNOWN_DEVICES_FILE = DATA_DIR / "known_devices.json"
+
+# Set up logging
+logger = setup_logging(
+    level=os.environ.get("LOG_LEVEL", "INFO"),
+    log_file=DATA_DIR / "alert_daemon.log",
+)
+
+# Network interface (auto-detected)
+INTERFACE = detect_network_interface()
+
+# Load cluster nodes configuration
 CLUSTER_CONFIG_FILE = DATA_DIR / "cluster_nodes.json"
-
-# Voice MCP endpoint (if running as HTTP)
-VOICE_MCP_SOCKET = os.environ.get("VOICE_MCP_SOCKET", "/tmp/voice-mode.sock")
+CLUSTER_NODES: dict[str, ClusterNodeConfig] = load_cluster_nodes(CLUSTER_CONFIG_FILE)
 
 
-def _load_cluster_nodes() -> dict:
+# =============================================================================
+# Alert Types
+# =============================================================================
+
+class AlertType:
+    """Alert type constants."""
+    NEW_DEVICE = "new_device"
+    NODE_OFFLINE = "node_offline"
+    NODE_RECOVERED = "node_recovered"
+    MULTIPLE_NEW_DEVICES = "multiple_new_devices"
+    UNKNOWN_DEVICE_DETECTED = "unknown_device_detected"
+    CLUSTER_DEGRADED = "cluster_degraded"
+    CLUSTER_HEALTHY = "cluster_healthy"
+
+
+# =============================================================================
+# Alert History
+# =============================================================================
+
+class AlertHistory:
+    """Manages alert history with persistence."""
+
+    def __init__(self, filepath: Path, max_entries: int = 1000):
+        self.filepath = filepath
+        self.max_entries = max_entries
+        self._history: dict = load_json_file(filepath, {"alerts": []})
+
+    def add(self, alert_type: str, message: str, data: Optional[dict] = None) -> dict:
+        """Add an alert to history."""
+        alert = {
+            "id": len(self._history.get("alerts", [])) + 1,
+            "timestamp": get_timestamp(),
+            "type": alert_type,
+            "message": message,
+            "data": data or {},
+        }
+
+        if "alerts" not in self._history:
+            self._history["alerts"] = []
+
+        self._history["alerts"].append(alert)
+
+        # Trim to max entries
+        if len(self._history["alerts"]) > self.max_entries:
+            self._history["alerts"] = self._history["alerts"][-self.max_entries:]
+
+        # Save to disk
+        save_json_file(self.filepath, self._history)
+
+        return alert
+
+    def get_recent(self, count: int = 10) -> list[dict]:
+        """Get recent alerts."""
+        alerts = self._history.get("alerts", [])
+        return alerts[-count:] if alerts else []
+
+    def get_by_type(self, alert_type: str, count: int = 10) -> list[dict]:
+        """Get alerts by type."""
+        alerts = [
+            a for a in self._history.get("alerts", [])
+            if a.get("type") == alert_type
+        ]
+        return alerts[-count:] if alerts else []
+
+
+# Initialize alert history
+alert_history = AlertHistory(ALERT_LOG, MAX_ALERT_HISTORY)
+
+
+# =============================================================================
+# Voice Alerts
+# =============================================================================
+
+async def speak_alert(message: str, priority: str = "normal") -> bool:
     """
-    Load cluster node configuration from file or environment.
+    Send voice alert using edge-tts.
 
-    Configuration sources (in priority order):
-    1. CLUSTER_NODES_JSON environment variable (JSON string)
-    2. cluster_nodes.json file in data directory
-    3. Empty dict (no predefined cluster nodes)
+    Args:
+        message: Message to speak
+        priority: Alert priority ("low", "normal", "high", "critical")
 
-    Example cluster_nodes.json:
-    {
-        "192.0.2.25": "node-1 (orchestrator)",
-        "192.0.2.152": "node-2 (worker)"
-    }
+    Returns:
+        True if successful
     """
-    # Try environment variable first
-    env_config = os.environ.get("CLUSTER_NODES_JSON")
-    if env_config:
-        try:
-            return json.loads(env_config)
-        except json.JSONDecodeError:
-            pass
-
-    # Try config file
-    if CLUSTER_CONFIG_FILE.exists():
-        try:
-            data = json.loads(CLUSTER_CONFIG_FILE.read_text())
-            # Support both dict formats: {"ip": "name"} or {"ip": {"name": ..., "role": ...}}
-            result = {}
-            for ip, info in data.items():
-                if isinstance(info, str):
-                    result[ip] = info
-                elif isinstance(info, dict):
-                    name = info.get("name", "unknown")
-                    role = info.get("role", "node")
-                    result[ip] = f"{name} ({role})"
-            return result
-        except (json.JSONDecodeError, IOError):
-            pass
-
-    # Return empty - no predefined cluster nodes
-    return {}
-
-
-# Cluster nodes to monitor - loaded from configuration
-CLUSTER_NODES = _load_cluster_nodes()
-
-
-def load_json(path: Path) -> dict:
-    """Load JSON file or return empty dict."""
-    if path.exists():
-        try:
-            return json.loads(path.read_text())
-        except:
-            return {}
-    return {}
-
-
-def save_json(path: Path, data: dict):
-    """Save data to JSON file."""
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(data, indent=2, default=str))
-
-
-async def speak_alert(message: str):
-    """Send voice alert via voice-mode MCP."""
     if not VOICE_ALERTS_ENABLED:
-        return
+        logger.debug("Voice alerts disabled")
+        return False
 
     try:
-        # Try calling voice-mode directly via subprocess
-        # This works because we can invoke the MCP tool from Python
+        # Adjust voice based on priority
+        rate = "+0%"
+        if priority == "high":
+            rate = "+10%"
+        elif priority == "critical":
+            rate = "+20%"
+
+        # Generate TTS audio
+        output_file = Path("/tmp/network_alert.mp3")
+
         process = await asyncio.create_subprocess_exec(
-            sys.executable, "-c",
-            f"""
-import asyncio
-import json
-import subprocess
-
-# Use edge-tts directly for simplicity
-async def speak():
-    proc = await asyncio.create_subprocess_exec(
-        'edge-tts', '--voice', 'en-IE-EmilyNeural',
-        '--text', '''{message.replace("'", "\\'")}''',
-        '--write-media', '/tmp/alert.mp3',
-        stdout=asyncio.subprocess.DEVNULL,
-        stderr=asyncio.subprocess.DEVNULL
-    )
-    await proc.wait()
-
-    # Play with mpv
-    proc = await asyncio.create_subprocess_exec(
-        'mpv', '--no-terminal', '/tmp/alert.mp3',
-        stdout=asyncio.subprocess.DEVNULL,
-        stderr=asyncio.subprocess.DEVNULL
-    )
-    await proc.wait()
-
-asyncio.run(speak())
-""",
+            "edge-tts",
+            "--voice", VOICE_NAME,
+            "--rate", rate,
+            "--text", message,
+            "--write-media", str(output_file),
             stdout=asyncio.subprocess.DEVNULL,
-            stderr=asyncio.subprocess.DEVNULL
+            stderr=asyncio.subprocess.PIPE,
         )
-        await process.wait()
-        print(f"[VOICE] {message}")
+
+        _, stderr = await asyncio.wait_for(process.communicate(), timeout=30)
+
+        if process.returncode != 0:
+            logger.error(f"edge-tts failed: {stderr.decode()}")
+            return False
+
+        # Play audio
+        play_process = await asyncio.create_subprocess_exec(
+            "mpv",
+            "--no-terminal",
+            "--really-quiet",
+            str(output_file),
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.DEVNULL,
+        )
+
+        await asyncio.wait_for(play_process.wait(), timeout=30)
+
+        logger.info(f"[VOICE] {message}")
+        return True
+
+    except FileNotFoundError as e:
+        logger.warning(f"Voice alert tool not found: {e}")
+        return False
+    except asyncio.TimeoutError:
+        logger.warning("Voice alert timed out")
+        return False
     except Exception as e:
-        print(f"[VOICE ERROR] {e}")
+        logger.error(f"Voice alert error: {e}")
+        return False
 
 
-async def send_node_chat_alert(message: str):
-    """Send alert to cluster via node-chat MCP."""
+# =============================================================================
+# Node-Chat Integration
+# =============================================================================
+
+async def send_node_chat_alert(
+    message: str,
+    alert_type: str,
+    data: Optional[dict] = None,
+    priority: str = "normal",
+) -> bool:
+    """
+    Send alert to cluster via node-chat MCP.
+
+    Tries multiple methods:
+    1. Direct socket connection
+    2. HTTP API
+    3. Database queue (fallback)
+
+    Args:
+        message: Alert message
+        alert_type: Type of alert
+        data: Additional alert data
+        priority: Alert priority
+
+    Returns:
+        True if any delivery method succeeded
+    """
     if not NODE_CHAT_ALERTS_ENABLED:
-        return
+        logger.debug("Node-chat alerts disabled")
+        return False
 
+    alert_payload = {
+        "type": "network_alert",
+        "alert_type": alert_type,
+        "message": message,
+        "priority": priority,
+        "timestamp": get_timestamp(),
+        "source": "network-scanner-daemon",
+        "data": data or {},
+    }
+
+    # Method 1: Try HTTP API
+    if aiohttp:
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    f"{NODE_CHAT_HTTP_URL}/broadcast",
+                    json=alert_payload,
+                    timeout=aiohttp.ClientTimeout(total=5),
+                ) as response:
+                    if response.status == 200:
+                        logger.info(f"[NODE-CHAT] Alert sent via HTTP: {message}")
+                        return True
+                    else:
+                        logger.debug(f"Node-chat HTTP returned {response.status}")
+        except Exception as e:
+            logger.debug(f"Node-chat HTTP failed: {e}")
+
+    # Method 2: Try Unix socket
+    socket_path = Path(NODE_CHAT_SOCKET)
+    if socket_path.exists():
+        try:
+            reader, writer = await asyncio.wait_for(
+                asyncio.open_unix_connection(str(socket_path)),
+                timeout=5,
+            )
+
+            # Send JSON-RPC style message
+            request = json.dumps({
+                "jsonrpc": "2.0",
+                "method": "broadcast_to_cluster",
+                "params": {"message": message, "priority": priority},
+                "id": 1,
+            }) + "\n"
+
+            writer.write(request.encode())
+            await writer.drain()
+
+            # Read response
+            response = await asyncio.wait_for(reader.readline(), timeout=5)
+
+            writer.close()
+            await writer.wait_closed()
+
+            if response:
+                logger.info(f"[NODE-CHAT] Alert sent via socket: {message}")
+                return True
+
+        except Exception as e:
+            logger.debug(f"Node-chat socket failed: {e}")
+
+    # Method 3: Write to database queue for later delivery
     try:
-        # Broadcast to cluster nodes
-        print(f"[NODE-CHAT] {message}")
-        # TODO: Implement actual node-chat integration
+        queue_file = DATA_DIR / "pending_alerts.json"
+        pending = load_json_file(queue_file, {"alerts": []})
+        pending["alerts"].append(alert_payload)
+
+        # Keep last 100 pending alerts
+        pending["alerts"] = pending["alerts"][-100:]
+        save_json_file(queue_file, pending)
+
+        logger.info(f"[NODE-CHAT] Alert queued for delivery: {message}")
+        return True
+
     except Exception as e:
-        print(f"[NODE-CHAT ERROR] {e}")
+        logger.error(f"Failed to queue alert: {e}")
+
+    return False
 
 
-async def scan_network() -> list:
-    """Run ARP scan and return list of devices."""
+# =============================================================================
+# Network Monitoring
+# =============================================================================
+
+async def scan_network() -> list[dict]:
+    """
+    Perform network scan.
+
+    Returns:
+        List of discovered devices
+    """
     try:
-        # Run arp-scan
-        process = await asyncio.create_subprocess_exec(
-            'sudo', 'arp-scan', '-l', '-I', 'enp20s0', '-q',
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
-        stdout, _ = await process.communicate()
-
-        devices = []
-        for line in stdout.decode().strip().split('\n'):
-            if line and '\t' in line:
-                parts = line.split('\t')
-                if len(parts) >= 2:
-                    devices.append({
-                        'ip': parts[0],
-                        'mac': parts[1].upper(),
-                        'vendor': parts[2] if len(parts) > 2 else 'Unknown'
-                    })
+        devices = await arp_scan(interface=INTERFACE)
+        logger.debug(f"Scan found {len(devices)} devices")
         return devices
     except Exception as e:
-        print(f"[SCAN ERROR] {e}")
+        logger.error(f"Network scan error: {e}")
         return []
 
 
-async def check_cluster_nodes(devices: list) -> tuple[list, list]:
-    """Check which cluster nodes are online/offline."""
-    online_ips = {d['ip'] for d in devices}
+def load_known_devices() -> set[str]:
+    """Load set of known device MAC addresses."""
+    known = load_json_file(KNOWN_DEVICES_FILE, {})
 
-    online_nodes = []
-    offline_nodes = []
+    # Handle both formats:
+    # Format 1: {"MAC": {...}}
+    # Format 2: {"devices": {"MAC": {...}}}
+    if "devices" in known:
+        return set(normalize_mac(mac) for mac in known["devices"].keys())
 
-    for ip, name in CLUSTER_NODES.items():
-        if ip in online_ips:
-            online_nodes.append((ip, name))
+    # Assume direct MAC->info mapping
+    return set(normalize_mac(mac) for mac in known.keys())
+
+
+async def check_cluster_nodes(discovered_ips: set[str]) -> tuple[list, list]:
+    """
+    Check cluster node status.
+
+    Args:
+        discovered_ips: Set of IPs found in scan
+
+    Returns:
+        Tuple of (online_nodes, offline_nodes)
+    """
+    online = []
+    offline = []
+
+    for ip, config in CLUSTER_NODES.items():
+        node_info = (ip, config["name"], config["role"])
+
+        if ip in discovered_ips:
+            online.append(node_info)
         else:
-            offline_nodes.append((ip, name))
+            # Double-check with ping
+            reachable = await ping_host_simple(ip)
+            if reachable:
+                online.append(node_info)
+            else:
+                offline.append(node_info)
 
-    return online_nodes, offline_nodes
-
-
-async def detect_new_devices(devices: list) -> list:
-    """Compare scan results with known devices, return new ones."""
-    known = load_json(KNOWN_DEVICES_FILE)
-    known_macs = set(known.get('devices', {}).keys())
-
-    new_devices = []
-    for device in devices:
-        mac = device['mac']
-        if mac not in known_macs:
-            new_devices.append(device)
-
-    return new_devices
+    return online, offline
 
 
-async def log_alert(alert_type: str, message: str, data: dict = None):
-    """Log alert to history file."""
-    history = load_json(ALERT_LOG)
-    if 'alerts' not in history:
-        history['alerts'] = []
-
-    history['alerts'].append({
-        'timestamp': datetime.now().isoformat(),
-        'type': alert_type,
-        'message': message,
-        'data': data or {}
-    })
-
-    # Keep last 1000 alerts
-    history['alerts'] = history['alerts'][-1000:]
-    save_json(ALERT_LOG, history)
+async def ping_host_simple(ip: str, timeout: float = 2.0) -> bool:
+    """Simple ping check."""
+    try:
+        process = await asyncio.create_subprocess_exec(
+            "ping", "-c", "1", "-W", str(int(timeout)), ip,
+            stdout=asyncio.subprocess.DEVNULL,
+            stderr=asyncio.subprocess.DEVNULL,
+        )
+        await asyncio.wait_for(process.wait(), timeout=timeout + 1)
+        return process.returncode == 0
+    except Exception:
+        return False
 
 
-async def monitor_loop():
+# =============================================================================
+# Alert Generation
+# =============================================================================
+
+async def process_new_device(device: dict) -> None:
+    """Process and alert on new device detection."""
+    ip = device.get("ip", "Unknown")
+    mac = device.get("mac", "Unknown")
+    vendor = device.get("vendor", "Unknown")
+
+    message = f"New device detected: {ip}, MAC {mac}, vendor: {vendor}"
+    voice_message = f"New device detected! IP address {ip}, {vendor}"
+
+    logger.warning(f"[NEW DEVICE] {message}")
+
+    # Log alert
+    alert_history.add(
+        AlertType.NEW_DEVICE,
+        message,
+        {"ip": ip, "mac": mac, "vendor": vendor}
+    )
+
+    # Send alerts concurrently
+    await asyncio.gather(
+        speak_alert(voice_message, priority="high"),
+        send_node_chat_alert(message, AlertType.NEW_DEVICE, device, priority="high"),
+        return_exceptions=True,
+    )
+
+
+async def process_node_offline(ip: str, name: str, role: str) -> None:
+    """Process and alert on cluster node going offline."""
+    message = f"Cluster node offline: {name} ({role}) at {ip}"
+    voice_message = f"Warning! Cluster node {name} is offline!"
+
+    logger.error(f"[CLUSTER] {message}")
+
+    alert_history.add(
+        AlertType.NODE_OFFLINE,
+        message,
+        {"ip": ip, "name": name, "role": role}
+    )
+
+    await asyncio.gather(
+        speak_alert(voice_message, priority="critical"),
+        send_node_chat_alert(message, AlertType.NODE_OFFLINE, {"ip": ip, "name": name, "role": role}, priority="critical"),
+        return_exceptions=True,
+    )
+
+
+async def process_node_recovered(ip: str, name: str, role: str) -> None:
+    """Process and alert on cluster node recovery."""
+    message = f"Cluster node recovered: {name} ({role}) at {ip}"
+    voice_message = f"Good news! Cluster node {name} is back online!"
+
+    logger.info(f"[CLUSTER] {message}")
+
+    alert_history.add(
+        AlertType.NODE_RECOVERED,
+        message,
+        {"ip": ip, "name": name, "role": role}
+    )
+
+    await asyncio.gather(
+        speak_alert(voice_message, priority="normal"),
+        send_node_chat_alert(message, AlertType.NODE_RECOVERED, {"ip": ip, "name": name, "role": role}, priority="normal"),
+        return_exceptions=True,
+    )
+
+
+# =============================================================================
+# Main Monitor Loop
+# =============================================================================
+
+async def monitor_loop() -> None:
     """Main monitoring loop."""
-    print(f"[DAEMON] Network Scanner Alert Daemon starting...")
-    print(f"[DAEMON] Scan interval: {SCAN_INTERVAL_SECONDS}s")
-    print(f"[DAEMON] Voice alerts: {VOICE_ALERTS_ENABLED}")
-    print(f"[DAEMON] Node-chat alerts: {NODE_CHAT_ALERTS_ENABLED}")
+    logger.info("=" * 60)
+    logger.info("Network Scanner Alert Daemon Starting")
+    logger.info("=" * 60)
+    logger.info(f"Interface: {INTERFACE}")
+    logger.info(f"Scan interval: {SCAN_INTERVAL_SECONDS}s")
+    logger.info(f"Voice alerts: {VOICE_ALERTS_ENABLED}")
+    logger.info(f"Node-chat alerts: {NODE_CHAT_ALERTS_ENABLED}")
+    logger.info(f"Alert on new devices: {ALERT_ON_NEW_DEVICES}")
+    logger.info(f"Alert on node down: {ALERT_ON_CLUSTER_NODE_DOWN}")
+    logger.info(f"Cluster nodes configured: {len(CLUSTER_NODES)}")
+    logger.info("=" * 60)
 
-    last_offline_nodes = set()
+    # Track state across scans
+    last_offline_nodes: set[str] = set()
+    seen_macs: set[str] = set()
+
+    # Initialize seen_macs from history
+    device_history_file = DATA_DIR / "device_history.json"
+    if device_history_file.exists():
+        history = load_json_file(device_history_file, {})
+        seen_macs = set(normalize_mac(mac) for mac in history.keys())
+        logger.info(f"Loaded {len(seen_macs)} known MAC addresses from history")
+
+    # Initial scan
+    iteration = 0
 
     while True:
+        iteration += 1
+        scan_time = datetime.now().isoformat()
+
         try:
-            print(f"\n[SCAN] {datetime.now().isoformat()} - Scanning network...")
+            logger.info(f"\n[SCAN #{iteration}] {scan_time} - Scanning network...")
+
+            # Perform network scan
             devices = await scan_network()
-            print(f"[SCAN] Found {len(devices)} devices")
+
+            if not devices:
+                logger.warning("No devices found in scan")
+                await asyncio.sleep(SCAN_INTERVAL_SECONDS)
+                continue
+
+            logger.info(f"[SCAN] Found {len(devices)} devices")
+
+            # Build sets for comparison
+            current_ips = {d["ip"] for d in devices}
+            current_macs = {normalize_mac(d["mac"]) for d in devices}
+            known_macs = load_known_devices()
 
             # Check for new devices
             if ALERT_ON_NEW_DEVICES:
-                new_devices = await detect_new_devices(devices)
-                if new_devices:
-                    for device in new_devices:
-                        msg = f"Alert! New device detected on network: {device['ip']}, MAC {device['mac']}, vendor {device['vendor']}"
-                        print(f"[NEW DEVICE] {msg}")
-                        await log_alert('new_device', msg, device)
-                        await speak_alert(f"New device detected! IP {device['ip']}, {device['vendor']}")
-                        await send_node_chat_alert(msg)
+                for device in devices:
+                    mac = normalize_mac(device["mac"])
+
+                    # New device = not seen before AND not in known list AND not a cluster node
+                    if mac not in seen_macs and mac not in known_macs:
+                        ip = device.get("ip", "")
+
+                        # Skip if it's a cluster node
+                        if ip in CLUSTER_NODES:
+                            logger.debug(f"Skipping new MAC for cluster node: {ip}")
+                            continue
+
+                        await process_new_device(device)
+
+                # Update seen MACs
+                seen_macs.update(current_macs)
 
             # Check cluster nodes
-            if ALERT_ON_CLUSTER_NODE_DOWN:
-                online_nodes, offline_nodes = await check_cluster_nodes(devices)
-                offline_set = {ip for ip, _ in offline_nodes}
+            if ALERT_ON_CLUSTER_NODE_DOWN and CLUSTER_NODES:
+                online_nodes, offline_nodes = await check_cluster_nodes(current_ips)
+                offline_ips = {ip for ip, _, _ in offline_nodes}
 
-                # Alert on newly offline nodes
-                newly_offline = offline_set - last_offline_nodes
-                for ip, name in offline_nodes:
+                # Newly offline nodes
+                newly_offline = offline_ips - last_offline_nodes
+                for ip, name, role in offline_nodes:
                     if ip in newly_offline:
-                        msg = f"Cluster node offline: {name} at {ip}"
-                        print(f"[CLUSTER] {msg}")
-                        await log_alert('node_offline', msg, {'ip': ip, 'name': name})
-                        await speak_alert(f"Warning! Cluster node {name.split()[0]} is offline!")
-                        await send_node_chat_alert(msg)
+                        await process_node_offline(ip, name, role)
 
-                # Log recovered nodes
-                recovered = last_offline_nodes - offline_set
+                # Recovered nodes
+                recovered = last_offline_nodes - offline_ips
                 for ip in recovered:
-                    name = CLUSTER_NODES.get(ip, 'Unknown')
-                    msg = f"Cluster node recovered: {name} at {ip}"
-                    print(f"[CLUSTER] {msg}")
-                    await log_alert('node_recovered', msg, {'ip': ip, 'name': name})
-                    await speak_alert(f"Good news! Cluster node {name.split()[0]} is back online!")
+                    if ip in CLUSTER_NODES:
+                        config = CLUSTER_NODES[ip]
+                        await process_node_recovered(ip, config["name"], config["role"])
 
-                last_offline_nodes = offline_set
-                print(f"[CLUSTER] Online: {len(online_nodes)}, Offline: {len(offline_nodes)}")
+                last_offline_nodes = offline_ips
+
+                logger.info(f"[CLUSTER] Online: {len(online_nodes)}, Offline: {len(offline_nodes)}")
 
         except Exception as e:
-            print(f"[ERROR] Monitor loop error: {e}")
+            logger.error(f"Monitor loop error: {e}", exc_info=True)
 
+        # Wait for next scan
+        logger.debug(f"Sleeping for {SCAN_INTERVAL_SECONDS}s")
         await asyncio.sleep(SCAN_INTERVAL_SECONDS)
 
 
-def main():
-    """Entry point."""
+# =============================================================================
+# Entry Point
+# =============================================================================
+
+def main() -> None:
+    """Entry point for the alert daemon."""
     # Ensure data directory exists
     DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Run the monitor
     try:
         asyncio.run(monitor_loop())
     except KeyboardInterrupt:
-        print("\n[DAEMON] Shutting down...")
+        logger.info("\n[DAEMON] Shutting down...")
+        sys.exit(0)
+    except Exception as e:
+        logger.error(f"Daemon crashed: {e}", exc_info=True)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
