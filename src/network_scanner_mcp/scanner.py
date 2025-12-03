@@ -393,14 +393,16 @@ def _identify_service(port: int, banner: str) -> str:
     """
     banner_lower = banner.lower()
 
+    # Web server identification (check these first as they may not include "http")
+    if "nginx" in banner_lower:
+        return "nginx"
+    if "apache" in banner_lower:
+        return "apache"
+    if "iis" in banner_lower:
+        return "iis"
+
     # HTTP/HTTPS indicators
     if "http" in banner_lower or banner.startswith("HTTP/"):
-        if "nginx" in banner_lower:
-            return "nginx"
-        elif "apache" in banner_lower:
-            return "apache"
-        elif "iis" in banner_lower:
-            return "iis"
         return "http"
 
     # SSH indicators
