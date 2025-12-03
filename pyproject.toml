@@ -1,21 +1,59 @@
 [project]
 name = "network-scanner-mcp"
-version = "0.1.0"
-description = "Network device scanner MCP for cluster environmental awareness"
+version = "0.2.0"
+description = "Network device scanner MCP for cluster environmental awareness with port scanning and service detection"
 readme = "README.md"
 requires-python = ">=3.10"
+license = {text = "MIT"}
+authors = [
+    {name = "AGI System", email = "agi@agentic-system.local"}
+]
+keywords = [
+    "mcp",
+    "network",
+    "scanner",
+    "arp",
+    "port-scanning",
+    "service-detection",
+    "cluster-monitoring"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: System :: Networking :: Monitoring",
+]
+
 dependencies = [
-    "mcp>=1.0.0",
-    "scapy>=2.5.0",
-    "mac-vendor-lookup>=0.1.12",
-    "python-nmap>=0.7.1",
-    "flask>=3.0.0",
-    "aiohttp>=3.9.0",
-    "netifaces>=0.11.0",
+    "fastmcp>=0.1.0",        # MCP framework
+    "netifaces>=0.11.0",     # Network interface detection
+    "aiohttp>=3.9.0",        # Async HTTP for node-chat integration
+]
+
+[project.optional-dependencies]
+vendor-lookup = [
+    "mac-vendor-lookup>=0.1.12",  # MAC vendor identification
+]
+dev = [
+    "pytest>=7.0.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.0.0",
+]
+all = [
+    "network-scanner-mcp[vendor-lookup,dev]",
 ]
 
 [project.scripts]
 network-scanner-mcp = "network_scanner_mcp.server:main"
+network-scanner-daemon = "network_scanner_mcp.alert_daemon:main"
+
+[project.urls]
+Homepage = "https://github.com/agentic-system/network-scanner-mcp"
+Repository = "https://github.com/agentic-system/network-scanner-mcp"
 
 [build-system]
 requires = ["hatchling"]
@@ -23,3 +61,19 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/network_scanner_mcp"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.coverage.run]
+source = ["src/network_scanner_mcp"]
+omit = ["*/tests/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "if __name__ == .__main__.:",
+    "raise NotImplementedError",
+]
