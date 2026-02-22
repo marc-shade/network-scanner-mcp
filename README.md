@@ -11,16 +11,6 @@ Part of the [Agentic System](https://github.com/marc-shade/agentic-system-oss) -
 
 Environmental awareness for the AGI cluster through network device discovery, port scanning, and service detection.
 
-```
-   ╭──────────────────────────────────────╮
-   │  PIXEL'S NETWORK AWARENESS           │
-   │                                      │
-   │  "I can see everything on the        │
-   │   network now - all devices,         │
-   │   services, and cluster health!"     │
-   ╰──────────────────────────────────────╯
-```
-
 ## Features
 
 ### Device Discovery
