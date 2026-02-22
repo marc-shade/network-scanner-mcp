@@ -942,6 +942,383 @@ async def export_for_security_scan() -> str:
 
 
 # =============================================================================
+# MCP Tools - Defense & Federal Compliance
+# =============================================================================
+
+@mcp.tool()
+async def network_scap_report(
+    target: Optional[str] = None,
+) -> str:
+    """
+    Generate SCAP-compliant scan results (XCCDF, OVAL, CPE).
+
+    Produces NIST SCAP 1.3 compliant output including XCCDF results,
+    OVAL definitions, and CPE identification for discovered assets.
+
+    Args:
+        target: IP address of specific target. If not specified, uses all devices.
+
+    Returns:
+        JSON with XCCDF XML, OVAL XML, and CPE URIs.
+    """
+    from .compliance.scap_output import (
+        generate_xccdf_results,
+        generate_oval_definitions,
+        identify_cpe,
+    )
+    from .compliance.cis_benchmarks import run_cis_assessment
+
+    if target:
+        device = registry.get_device_by_ip(target)
+        if not device:
+            return json.dumps({"success": False, "error": f"Device not found: {target}"})
+        devices_to_process = [device]
+    else:
+        all_devices = registry.get_all_devices()
+        devices_to_process = list(all_devices.values())
+
+    if not devices_to_process:
+        return json.dumps({"success": False, "error": "No devices to assess. Run scan_network first."})
+
+    # Use the first device for single-target report, or aggregate
+    primary = devices_to_process[0]
+    primary_ip = primary.get("ip", "unknown")
+
+    # Run CIS checks to populate XCCDF
+    cis_results = await run_cis_assessment(primary_ip)
+    checks = [c.to_dict() for c in cis_results.checks]
+
+    # Build SCAP output
+    scan_data = {
+        "target": primary_ip,
+        "scan_time": get_timestamp(),
+        "checks": checks,
+        "device_info": primary,
+    }
+
+    xccdf_xml = generate_xccdf_results(scan_data)
+    oval_xml = generate_oval_definitions(checks)
+
+    # CPE for all devices
+    all_cpes = {}
+    for dev in devices_to_process:
+        dev_ip = dev.get("ip", "unknown")
+        cpes = identify_cpe(dev)
+        if cpes:
+            all_cpes[dev_ip] = cpes
+
+    return json.dumps({
+        "success": True,
+        "target": primary_ip,
+        "scap_version": "1.3",
+        "xccdf_results": xccdf_xml,
+        "oval_definitions": oval_xml,
+        "cpe_inventory": all_cpes,
+        "assessment_summary": {
+            "total_checks": cis_results.total_checks,
+            "passed": cis_results.passed,
+            "failed": cis_results.failed,
+            "compliance_score": cis_results.compliance_score,
+        },
+        "message": f"SCAP report generated for {primary_ip} with {len(checks)} checks",
+    }, indent=2)
+
+
+@mcp.tool()
+async def network_cis_check(
+    target: str,
+    known_services: Optional[str] = None,
+) -> str:
+    """
+    Run CIS Benchmark assessment against a target device.
+
+    Performs network device hardening checks aligned with CIS Benchmarks
+    including: unused ports, default credentials, TLS enforcement,
+    SNMP security, SSH configuration, NTP, syslog, and ACL audit.
+
+    Args:
+        target: IP address of the target device.
+        known_services: Comma-separated list of intentionally open ports to exclude.
+
+    Returns:
+        JSON with CIS compliance report including per-check results.
+    """
+    from .compliance.cis_benchmarks import run_cis_assessment, generate_cis_report
+
+    services_list: list[int] = []
+    if known_services:
+        try:
+            services_list = [int(p.strip()) for p in known_services.split(",")]
+        except ValueError:
+            return json.dumps({
+                "success": False,
+                "error": "Invalid known_services format. Use comma-separated port numbers."
+            })
+
+    logger.info(f"Running CIS assessment for {target}")
+    results = await run_cis_assessment(target, services_list)
+    report = generate_cis_report(results)
+
+    return json.dumps({
+        "success": True,
+        **report,
+    }, indent=2)
+
+
+@mcp.tool()
+async def network_asset_inventory() -> str:
+    """
+    Generate NIST CSF-aligned asset inventory.
+
+    Produces a comprehensive asset inventory covering NIST CSF Identify
+    function subcategories: ID.AM-1 through ID.AM-5. Includes asset
+    classification, risk scoring, software inventory, and data flow mapping.
+
+    Returns:
+        JSON with complete asset inventory, risk scores, and NIST CSF coverage.
+    """
+    from .compliance.nist_csf_inventory import build_asset_inventory
+
+    all_devices = registry.get_all_devices()
+
+    if not all_devices:
+        return json.dumps({
+            "success": False,
+            "error": "No devices in inventory. Run scan_network first."
+        })
+
+    # Build device list with full data
+    devices = []
+    for mac, device in all_devices.items():
+        dev = {**device, "mac": mac}
+        dev["is_cluster_node"] = dev.get("ip", "") in CLUSTER_NODES
+        devices.append(dev)
+
+    scan_data = {
+        "devices": devices,
+        "cluster_nodes": CLUSTER_NODES,
+    }
+
+    inventory = build_asset_inventory(scan_data)
+
+    return json.dumps({
+        "success": True,
+        **inventory,
+    }, indent=2)
+
+
+@mcp.tool()
+async def network_zero_trust_assess() -> str:
+    """
+    Perform Zero Trust Architecture posture assessment.
+
+    Assesses network against all five ZT pillars per NIST SP 800-207 and
+    the CISA Zero Trust Maturity Model: Identity, Device, Network,
+    Application, Data. Includes DoD ZTA and OMB M-22-09 alignment.
+
+    Returns:
+        JSON with per-pillar scores, maturity levels, and improvement roadmap.
+    """
+    from .compliance.zero_trust import (
+        assess_zero_trust_posture,
+        generate_zt_roadmap,
+        zt_maturity_score,
+    )
+
+    all_devices = registry.get_all_devices()
+
+    if not all_devices:
+        return json.dumps({
+            "success": False,
+            "error": "No devices to assess. Run scan_network first."
+        })
+
+    # Build network data
+    devices = []
+    for mac, device in all_devices.items():
+        dev = {**device, "mac": mac}
+        dev["is_cluster_node"] = dev.get("ip", "") in CLUSTER_NODES
+        devices.append(dev)
+
+    network_data = {
+        "devices": devices,
+        "cluster_nodes": CLUSTER_NODES,
+        "subnet": detect_local_subnet(),
+    }
+
+    assessment = assess_zero_trust_posture(network_data)
+    roadmap = generate_zt_roadmap(assessment)
+    maturity = zt_maturity_score(assessment)
+
+    return json.dumps({
+        "success": True,
+        "assessment": assessment.to_dict(),
+        "maturity_score": maturity,
+        "roadmap": roadmap,
+    }, indent=2)
+
+
+@mcp.tool()
+async def network_compliance_map(
+    include_cis: bool = True,
+) -> str:
+    """
+    Map network scan findings to NIST SP 800-53 Rev. 5 security controls.
+
+    Evaluates scan data against CA-7, CM-8, RA-5, SC-7, SI-4, PM-5, and AC-17
+    controls. Produces compliance mapping showing control satisfaction status.
+
+    Args:
+        include_cis: Whether to include CIS benchmark results in the mapping.
+
+    Returns:
+        JSON with control mappings, compliance score, and baseline coverage.
+    """
+    from .compliance.nist_800_53 import map_findings_to_controls
+
+    all_devices = registry.get_all_devices()
+
+    if not all_devices:
+        return json.dumps({
+            "success": False,
+            "error": "No devices to assess. Run scan_network first."
+        })
+
+    devices = []
+    for mac, device in all_devices.items():
+        dev = {**device, "mac": mac}
+        dev["is_cluster_node"] = dev.get("ip", "") in CLUSTER_NODES
+        devices.append(dev)
+
+    scan_data = {
+        "devices": devices,
+        "total_devices": len(devices),
+        "new_devices": [],
+        "topology": {},
+    }
+
+    # Optionally include CIS results
+    if include_cis and devices:
+        from .compliance.cis_benchmarks import run_cis_assessment
+        first_ip = devices[0].get("ip")
+        if first_ip:
+            cis = await run_cis_assessment(first_ip)
+            scan_data["cis_results"] = cis.to_dict()
+
+    mapping = map_findings_to_controls(scan_data)
+
+    return json.dumps({
+        "success": True,
+        **mapping,
+    }, indent=2)
+
+
+@mcp.tool()
+async def network_vuln_prioritize(
+    vulns_json: str,
+) -> str:
+    """
+    Perform defense-grade vulnerability prioritization.
+
+    Scores vulnerabilities using CVSS v3.1, SSVC (CISA), KEV cross-reference,
+    and mission impact assessment. Returns prioritized remediation order.
+
+    Args:
+        vulns_json: JSON string containing array of vulnerability objects.
+            Each object should have CVSS vector components: attack_vector,
+            attack_complexity, privileges_required, user_interaction, scope,
+            confidentiality, integrity, availability. Optional: exploit_maturity,
+            exploitation_status, cve_id.
+
+    Returns:
+        JSON with prioritized vulnerabilities and composite scores.
+    """
+    from .compliance.vuln_scoring import prioritize_vulnerabilities
+
+    try:
+        vulns = json.loads(vulns_json)
+    except json.JSONDecodeError as e:
+        return json.dumps({"success": False, "error": f"Invalid JSON: {e}"})
+
+    if not isinstance(vulns, list):
+        vulns = [vulns]
+
+    # Build context from registry
+    all_devices = registry.get_all_devices()
+    all_services = set()
+    all_vendors = set()
+
+    for device in all_devices.values():
+        for svc in device.get("services", []):
+            all_services.add(svc)
+        vendor = device.get("vendor", "")
+        if vendor and vendor != "Unknown":
+            all_vendors.add(vendor)
+
+    mission_context = {
+        "services": list(all_services),
+        "vendor": ", ".join(all_vendors),
+        "is_cluster_node": any(
+            d.get("ip") in CLUSTER_NODES for d in all_devices.values()
+        ),
+        "classification": "CONFIDENTIAL",
+    }
+
+    result = prioritize_vulnerabilities(vulns, mission_context)
+
+    return json.dumps({
+        "success": True,
+        **result,
+    }, indent=2)
+
+
+@mcp.tool()
+async def network_generate_poam() -> str:
+    """
+    Generate Plan of Action & Milestones (POA&M) document.
+
+    Creates a POA&M per NIST SP 800-37 Rev. 2 from all findings that map to
+    unsatisfied NIST 800-53 controls. Includes severity-based SLA timelines
+    and phased remediation milestones.
+
+    Returns:
+        JSON with POA&M entries, summary, and compliance references.
+    """
+    from .compliance.nist_800_53 import map_findings_to_controls, generate_poam
+
+    all_devices = registry.get_all_devices()
+
+    if not all_devices:
+        return json.dumps({
+            "success": False,
+            "error": "No devices to assess. Run scan_network first."
+        })
+
+    devices = []
+    for mac, device in all_devices.items():
+        dev = {**device, "mac": mac}
+        dev["is_cluster_node"] = dev.get("ip", "") in CLUSTER_NODES
+        devices.append(dev)
+
+    scan_data = {
+        "devices": devices,
+        "total_devices": len(devices),
+        "new_devices": [],
+    }
+
+    # First generate the control mapping
+    mapping = map_findings_to_controls(scan_data)
+
+    # Then generate POA&M from findings
+    poam = generate_poam(mapping)
+
+    return json.dumps({
+        "success": True,
+        **poam,
+    }, indent=2)
+
+
+# =============================================================================
 # Entry Point
 # =============================================================================
 

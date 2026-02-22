@@ -1,7 +1,7 @@
 [project]
 name = "network-scanner-mcp"
-version = "0.2.0"
-description = "Network device scanner MCP for cluster environmental awareness with port scanning and service detection"
+version = "0.3.0"
+description = "Network security scanner MCP with defense-grade compliance (SCAP, CIS, NIST CSF, Zero Trust, 800-53, CVSS/SSVC/KEV)"
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
@@ -15,7 +15,17 @@ keywords = [
     "arp",
     "port-scanning",
     "service-detection",
-    "cluster-monitoring"
+    "cluster-monitoring",
+    "scap",
+    "cis-benchmarks",
+    "nist-csf",
+    "zero-trust",
+    "nist-800-53",
+    "cvss",
+    "ssvc",
+    "compliance",
+    "vulnerability-assessment",
+    "defense"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
