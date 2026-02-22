@@ -645,8 +645,8 @@ async def full_device_scan(
 async def discover_network(
     subnet: Optional[str] = None,
     interface: Optional[str] = None,
-    scan_ports: bool = False,
-    resolve_hostnames: bool = True,
+    include_ports: bool = False,
+    include_hostnames: bool = True,
 ) -> list[DeviceScanResult]:
     """
     Discover all devices on the network with optional detailed scanning.
@@ -654,8 +654,8 @@ async def discover_network(
     Args:
         subnet: Subnet to scan (auto-detected if None)
         interface: Network interface (auto-detected if None)
-        scan_ports: Whether to scan ports on discovered devices
-        resolve_hostnames: Whether to resolve hostnames
+        include_ports: Whether to scan ports on discovered devices
+        include_hostnames: Whether to resolve hostnames
 
     Returns:
         List of device scan results
@@ -671,7 +671,7 @@ async def discover_network(
 
     # Step 2: Resolve hostnames (if requested)
     hostname_map = {}
-    if resolve_hostnames:
+    if include_hostnames:
         ips = [d["ip"] for d in devices]
         hostname_map = await resolve_hostnames(ips)
 
@@ -686,7 +686,7 @@ async def discover_network(
         )
 
         # Step 4: Port scan (if requested)
-        if scan_ports:
+        if include_ports:
             port_results = await scan_ports(device["ip"])
             result.ports = port_results
             result.services = [
