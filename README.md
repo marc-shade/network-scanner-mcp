@@ -1,4 +1,6 @@
-# Network Scanner MCP
+
+# Network Scanner MCP![network_scanner_mcp](https://github.com/user-attachments/assets/4b4e2262-7dd0-44c0-9f13-11d835bfd3bf)
+
 
 [![MCP](https://img.shields.io/badge/MCP-Compatible-blue)](https://modelcontextprotocol.io)
 [![Python-3.10+](https://img.shields.io/badge/Python-3.10%2B-green)](https://python.org)
