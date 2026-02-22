@@ -8,6 +8,7 @@ This package provides network scanning and monitoring capabilities:
 - Cluster node monitoring
 - Alert daemon for continuous monitoring
 - Integration with node-chat MCP for cluster alerts
+- Defense and federal compliance (SCAP, CIS, NIST CSF, ZTA, 800-53, CVSS/SSVC/KEV)
 
 Requires: arp-scan (system package), edge-tts (for voice alerts)
 
@@ -48,6 +49,8 @@ from .scanner import (
     ping_hosts,
     full_device_scan,
     discover_network,
+    PortScanResult,
+    DeviceScanResult,
     COMMON_PORTS,
     SERVICE_PORTS,
 )
@@ -59,6 +62,8 @@ __all__ = [
     "ClusterNodeConfig",
     "DeviceInfo",
     "ScanResult",
+    "PortScanResult",
+    "DeviceScanResult",
     # Utils
     "detect_network_interface",
     "detect_local_subnet",

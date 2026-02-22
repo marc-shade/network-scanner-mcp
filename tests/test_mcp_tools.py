@@ -5,37 +5,8 @@ from unittest.mock import AsyncMock, patch, MagicMock
 
 import pytest
 
-# These will be imported after conftest sets up sys.path
 from network_scanner_mcp import server
 from network_scanner_mcp.scanner import PortScanResult
-
-
-def unwrap_mcp_tool(mcp_instance, tool_name):
-    """Unwrap a FastMCP tool to get the underlying function."""
-    # FastMCP tools are stored in mcp._tools
-    for tool in mcp_instance._tools:
-        if tool.name == tool_name:
-            return tool.fn
-    raise ValueError(f"Tool {tool_name} not found")
-
-
-@pytest.fixture
-def mock_registry(sample_device_history, sample_known_devices, sample_cluster_nodes):
-    """Mock the global registry with sample data."""
-    mock_reg = MagicMock()
-    mock_reg.get_all_devices.return_value = sample_device_history.copy()
-    mock_reg.get_known_devices.return_value = sample_known_devices.copy()
-    mock_reg.get_device.return_value = sample_device_history["00:00:00:00:00:63"].copy()
-    mock_reg.get_device_by_ip.return_value = sample_device_history["00:00:00:00:00:63"].copy()
-    mock_reg.update_device.return_value = (False, sample_device_history["00:00:00:00:00:63"].copy())
-    mock_reg.is_known.return_value = False
-    mock_reg.get_unknown_macs.return_value = {"00:00:00:00:00:63"}
-    mock_reg.mark_known.return_value = True
-    mock_reg.remove_known.return_value = True
-
-    with patch.object(server, 'registry', mock_reg), \
-         patch.object(server, 'CLUSTER_NODES', sample_cluster_nodes):
-        yield mock_reg
 
 
 class TestScanNetworkTool:
@@ -342,8 +313,8 @@ class TestPortScanningTools:
 
     @pytest.mark.asyncio
     async def test_scan_device_ports_by_ip(self, mock_registry):
-        """Test scanning ports by IP address."""
-        with patch('network_scanner_mcp.server.scan_ports') as mock_scan:
+        """Test scanning ports by IP address (quick mode by default)."""
+        with patch('network_scanner_mcp.server.quick_port_scan') as mock_scan:
             mock_scan.return_value = [
                 PortScanResult(port=22, state="open", service="ssh", response_time_ms=15.3),
                 PortScanResult(port=80, state="open", service="http", response_time_ms=20.1),
@@ -360,8 +331,8 @@ class TestPortScanningTools:
 
     @pytest.mark.asyncio
     async def test_scan_device_ports_by_mac(self, mock_registry, sample_device_history):
-        """Test scanning ports by MAC address."""
-        with patch('network_scanner_mcp.server.scan_ports') as mock_scan:
+        """Test scanning ports by MAC address (quick mode by default)."""
+        with patch('network_scanner_mcp.server.quick_port_scan') as mock_scan:
             mock_scan.return_value = [
                 PortScanResult(port=443, state="open", service="https"),
             ]

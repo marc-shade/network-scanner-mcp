@@ -2,6 +2,7 @@
 
 import json
 import os
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 from unittest.mock import patch, MagicMock
@@ -38,14 +39,15 @@ class TestConfigurationUtils:
         assert result == test_dir
         assert result.exists()
 
-    def test_get_data_dir_default(self, monkeypatch):
+    def test_get_data_dir_default(self, tmp_path, monkeypatch):
         """Test data directory detection with default path."""
         monkeypatch.delenv("NETWORK_SCANNER_DATA_DIR", raising=False)
-        monkeypatch.setenv("AGENTIC_SYSTEM_PATH", "/tmp/test-system")
+        monkeypatch.setenv("AGENTIC_SYSTEM_PATH", str(tmp_path))
 
         result = get_data_dir()
 
         assert "network-scanner" in str(result)
+        assert result.exists()
 
     def test_get_config_value_string(self, monkeypatch):
         """Test config value retrieval as string."""
@@ -191,14 +193,18 @@ class TestNetworkInterfaceDetection:
 
         assert result == "enp20s0"
 
-    @patch('network_scanner_mcp.utils.netifaces')
-    def test_detect_network_interface_netifaces(self, mock_netifaces, monkeypatch):
+    def test_detect_network_interface_netifaces(self, monkeypatch):
         """Test interface detection using netifaces."""
         monkeypatch.delenv("NETWORK_INTERFACE", raising=False)
+
+        mock_netifaces = MagicMock()
         mock_netifaces.AF_INET = 2
         mock_netifaces.gateways.return_value = {
             'default': {2: ['192.0.2.1', 'eth0']}
         }
+
+        # Inject mock netifaces into sys.modules so `import netifaces` finds it
+        monkeypatch.setitem(sys.modules, 'netifaces', mock_netifaces)
 
         result = detect_network_interface()
 

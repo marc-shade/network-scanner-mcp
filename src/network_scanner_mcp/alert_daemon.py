@@ -38,7 +38,7 @@ from .utils import (
     setup_logging,
     detect_network_interface,
 )
-from .scanner import arp_scan, ping_hosts
+from .scanner import arp_scan
 
 # =============================================================================
 # Configuration

@@ -15,7 +15,6 @@ import asyncio
 import logging
 import re
 import socket
-import struct
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Optional
@@ -529,9 +528,10 @@ async def ping_host(
         )
 
         if process.returncode == 0:
-            # Parse average latency from ping output
+            # Parse average latency from ping output.
+            # Both Linux and macOS format: min/avg/max/... = X.X/Y.Y/Z.Z/...
             output = stdout.decode()
-            match = re.search(r'avg[^=]*=\s*([\d.]+)', output)
+            match = re.search(r'=\s*[\d.]+/([\d.]+)/', output)
             if match:
                 return (True, float(match.group(1)))
             return (True, None)
@@ -579,26 +579,26 @@ async def full_device_scan(
     ip: str,
     mac: str,
     vendor: str = "Unknown",
-    scan_ports: bool = True,
-    resolve_hostname: bool = True,
+    do_port_scan: bool = True,
+    do_hostname_lookup: bool = True,
     port_list: Optional[list[int]] = None,
 ) -> DeviceScanResult:
     """
     Perform a comprehensive scan of a single device.
 
+    Runs port scanning and hostname resolution in parallel for efficiency.
+
     Args:
-        ip: Device IP address
-        mac: Device MAC address
-        vendor: Vendor name (from ARP)
-        scan_ports: Whether to perform port scanning
-        resolve_hostname: Whether to resolve hostname
-        port_list: Custom port list (uses COMMON_PORTS if None)
+        ip: Device IP address.
+        mac: Device MAC address.
+        vendor: Vendor name (from ARP).
+        do_port_scan: Whether to perform port scanning.
+        do_hostname_lookup: Whether to resolve hostname via reverse DNS.
+        port_list: Custom port list (uses COMMON_PORTS if None).
 
     Returns:
-        Complete device scan result
+        Complete device scan result with ports, services, and hostname.
     """
-    from .scanner import resolve_hostname as _resolve_hostname, scan_ports as _scan_ports
-
     timestamp = get_timestamp()
     result = DeviceScanResult(
         ip=ip,
@@ -610,24 +610,24 @@ async def full_device_scan(
     # Parallel tasks
     tasks = []
 
-    if resolve_hostname:
-        tasks.append(_resolve_hostname(ip))
+    if do_hostname_lookup:
+        tasks.append(resolve_hostname(ip))
 
-    if scan_ports:
+    if do_port_scan:
         ports = port_list or COMMON_PORTS
-        tasks.append(_scan_ports(ip, ports))
+        tasks.append(scan_ports(ip, ports))
 
     # Execute parallel tasks
     if tasks:
         results = await asyncio.gather(*tasks, return_exceptions=True)
 
         idx = 0
-        if resolve_hostname:
+        if do_hostname_lookup:
             if isinstance(results[idx], str) or results[idx] is None:
                 result.hostname = results[idx]
             idx += 1
 
-        if scan_ports:
+        if do_port_scan:
             if isinstance(results[idx], list):
                 result.ports = results[idx]
                 result.services = [

@@ -24,8 +24,21 @@ def temp_data_dir(tmp_path):
 
 @pytest.fixture
 def mock_data_dir(temp_data_dir, monkeypatch):
-    """Mock the data directory to use temp directory."""
+    """Mock the data directory and server-level file path constants.
+
+    This patches both the environment variable AND the module-level constants
+    in server.py that were computed at import time, ensuring the DeviceRegistry
+    reads from and writes to the temp directory.
+    """
     monkeypatch.setenv("NETWORK_SCANNER_DATA_DIR", str(temp_data_dir))
+
+    # Patch module-level constants in server.py so DeviceRegistry uses temp dir
+    import network_scanner_mcp.server as server_mod
+    monkeypatch.setattr(server_mod, "DATA_DIR", temp_data_dir)
+    monkeypatch.setattr(server_mod, "DEVICE_HISTORY_FILE", temp_data_dir / "device_history.json")
+    monkeypatch.setattr(server_mod, "KNOWN_DEVICES_FILE", temp_data_dir / "known_devices.json")
+    monkeypatch.setattr(server_mod, "CLUSTER_CONFIG_FILE", temp_data_dir / "cluster_nodes.json")
+
     return temp_data_dir
 
 
@@ -129,3 +142,29 @@ def mock_network_interface():
     """Mock network interface detection to return a known value."""
     with patch('network_scanner_mcp.utils.detect_network_interface', return_value='eth0'):
         yield 'eth0'
+
+
+@pytest.fixture
+def mock_registry(sample_device_history, sample_known_devices, sample_cluster_nodes):
+    """Mock the global registry with sample data.
+
+    Patches both the registry and CLUSTER_NODES in server.py so that
+    MCP tool tests get predictable data without touching disk.
+    """
+    from unittest.mock import MagicMock
+    from network_scanner_mcp import server
+
+    mock_reg = MagicMock()
+    mock_reg.get_all_devices.return_value = sample_device_history.copy()
+    mock_reg.get_known_devices.return_value = sample_known_devices.copy()
+    mock_reg.get_device.return_value = sample_device_history["00:00:00:00:00:63"].copy()
+    mock_reg.get_device_by_ip.return_value = sample_device_history["00:00:00:00:00:63"].copy()
+    mock_reg.update_device.return_value = (False, sample_device_history["00:00:00:00:00:63"].copy())
+    mock_reg.is_known.return_value = False
+    mock_reg.get_unknown_macs.return_value = {"00:00:00:00:00:63"}
+    mock_reg.mark_known.return_value = True
+    mock_reg.remove_known.return_value = True
+
+    with patch.object(server, 'registry', mock_reg), \
+         patch.object(server, 'CLUSTER_NODES', sample_cluster_nodes):
+        yield mock_reg

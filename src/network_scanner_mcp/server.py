@@ -15,12 +15,9 @@ Provides environmental awareness for the AGI cluster by:
 Requires root/sudo for raw packet operations (arp-scan).
 """
 
-import asyncio
 import json
 import logging
 import os
-from datetime import datetime
-from pathlib import Path
 from threading import Lock
 from typing import Optional
 
@@ -48,11 +45,7 @@ from .scanner import (
     resolve_hostname,
     resolve_hostnames,
     ping_host,
-    ping_hosts,
-    full_device_scan,
-    discover_network,
     COMMON_PORTS,
-    SERVICE_PORTS,
 )
 
 # =============================================================================
@@ -681,7 +674,8 @@ async def scan_device_ports(
     target = target.upper()
     ip = target
 
-    if ":" in target:  # Looks like MAC
+    if ":" in target:  # Looks like MAC address
+        ip = None
         device = registry.get_device(target)
         if device:
             ip = device.get("ip")
@@ -827,6 +821,7 @@ async def ping_device(target: str, count: int = 3) -> str:
     ip = target
 
     if ":" in target.upper():  # MAC address
+        ip = None
         device = registry.get_device(target.upper())
         if device:
             ip = device.get("ip")

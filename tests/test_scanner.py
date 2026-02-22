@@ -383,8 +383,8 @@ class TestFullDeviceScan:
                 ip="192.0.2.102",
                 mac="00:00:00:00:00:63",
                 vendor="Apple, Inc.",
-                scan_ports=True,
-                resolve_hostname=True
+                do_port_scan=True,
+                do_hostname_lookup=True,
             )
 
             assert result.ip == "192.0.2.102"
@@ -401,8 +401,8 @@ class TestFullDeviceScan:
         result = await full_device_scan(
             ip="192.0.2.102",
             mac="00:00:00:00:00:63",
-            scan_ports=False,
-            resolve_hostname=False
+            do_port_scan=False,
+            do_hostname_lookup=False,
         )
 
         assert result.ip == "192.0.2.102"
@@ -421,9 +421,9 @@ class TestFullDeviceScan:
             result = await full_device_scan(
                 ip="192.0.2.102",
                 mac="00:00:00:00:00:63",
-                scan_ports=True,
-                resolve_hostname=False,
-                port_list=[8080, 8443]
+                do_port_scan=True,
+                do_hostname_lookup=False,
+                port_list=[8080, 8443],
             )
 
             mock_scan.assert_called_once_with("192.0.2.102", [8080, 8443])
@@ -449,7 +449,7 @@ class TestNetworkDiscovery:
                 "192.0.2.138": "host2.local",
             }
 
-            results = await discover_network(resolve_hostnames=True, scan_ports=False)
+            results = await discover_network(include_hostnames=True, include_ports=False)
 
             assert len(results) == 2
             assert results[0].ip == "192.0.2.102"
@@ -472,7 +472,7 @@ class TestNetworkDiscovery:
                 PortScanResult(port=22, state="open", service="ssh"),
             ]
 
-            results = await discover_network(scan_ports=True, resolve_hostnames=False)
+            results = await discover_network(include_ports=True, include_hostnames=False)
 
             assert len(results) == 1
             assert len(results[0].ports) == 1
