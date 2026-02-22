@@ -23,7 +23,7 @@ Example usage:
     from network_scanner_mcp.utils import load_cluster_nodes
 """
 
-__version__ = "0.2.0"
+__version__ = "0.3.0"
 __author__ = "AGI System"
 
 from .utils import (

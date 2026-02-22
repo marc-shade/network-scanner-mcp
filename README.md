@@ -48,6 +48,58 @@ Environmental awareness for the AGI cluster through network device discovery, po
 - **Node-Chat Integration**: Broadcast alerts to cluster nodes
 - **Alert History**: Persistent alert log with history
 
+### Defense & Federal Compliance
+
+#### SCAP Compliance Output
+- **XCCDF 1.2**: Generates Extensible Configuration Checklist Description Format results per NIST SP 800-126 Rev. 3
+- **OVAL 5.11**: Produces Open Vulnerability and Assessment Language definitions for automated assessment
+- **CPE 2.3**: Common Platform Enumeration for asset identification with vendor/product/version resolution
+- **CCE References**: Common Configuration Enumeration identifiers linked to check results
+
+#### CIS Benchmark Checking
+- Unused high-risk ports detection (telnet, FTP, rlogin, etc.)
+- Default credential detection via banner analysis
+- TLS 1.2+ enforcement verification (per NIST SP 800-52 Rev. 2)
+- SNMP community string brute-force testing (SNMPv2c packet construction)
+- SSH configuration audit (protocol version, server currency)
+- NTP synchronization verification (UDP NTP client probe)
+- Syslog forwarding configuration check
+- Access control list posture assessment
+- Each check returns: benchmark_id, title, description, level (L1/L2), status, rationale, remediation
+
+#### NIST CSF Asset Inventory
+- **ID.AM-1**: Physical devices and systems inventoried with type classification
+- **ID.AM-2**: Software platforms and applications catalogued from port/banner data
+- **ID.AM-3**: Organizational data flows mapped (direction, encryption status)
+- **ID.AM-4**: External information systems identified via RFC 1918 boundary analysis
+- **ID.AM-5**: Resources prioritized by classification (PUBLIC/INTERNAL/CONFIDENTIAL/RESTRICTED) and risk score
+- Multi-factor risk scoring: exposure (30%), criticality (25%), vulnerability (25%), patch status (20%)
+
+#### Zero Trust Architecture Assessment (NIST SP 800-207 + DISA ZTA)
+- **Pillar 1 - Identity**: Authentication strength, MFA indicators, centralized identity services
+- **Pillar 2 - Device**: Inventory completeness, device health, endpoint management coverage
+- **Pillar 3 - Network**: Micro-segmentation, encrypted transport ratio, lateral movement risk
+- **Pillar 4 - Application**: HTTPS coverage, API security, web application posture
+- **Pillar 5 - Data**: Database exposure, data-in-transit encryption, storage security
+- Maturity scoring per CISA ZT Maturity Model: TRADITIONAL / ADVANCED / OPTIMAL
+- DoD ZTA Reference Architecture alignment assessment
+- OMB M-22-09 Federal Zero Trust Strategy gap analysis
+- Phased transformation roadmap generation
+
+#### NIST SP 800-53 Rev. 5 Control Mapping
+- Maps findings to: CA-7, CM-8, RA-5, SC-7, SI-4, PM-5, AC-17
+- Control satisfaction assessment: satisfied / partially_satisfied / not_satisfied
+- FIPS 199 baseline coverage (LOW / MODERATE / HIGH)
+- POA&M generation with severity-based SLAs (30/90/180 days)
+- Phased remediation milestones per NIST SP 800-37 Rev. 2
+
+#### Multi-Framework Vulnerability Scoring
+- **CVSS v3.1**: Complete base, temporal, and environmental score computation per FIRST specification
+- **SSVC**: Stakeholder-Specific Vulnerability Categorization using CISA decision tree (Track/Track*/Attend/Act)
+- **KEV**: Known Exploited Vulnerabilities cross-reference with ransomware indicators
+- **Mission Impact**: Defense-grade impact assessment considering service criticality and asset classification
+- Composite priority scoring combining all frameworks
+
 ## Installation
 
 ```bash
@@ -176,6 +228,18 @@ export CLUSTER_NODES_JSON='{"192.0.2.146": {"name": "orchestrator", "role": "orc
 |------|-------------|
 | `get_cluster_nodes()` | Status of configured cluster nodes |
 | `check_cluster_health()` | Ping all nodes and report health |
+
+### Defense & Federal Compliance
+
+| Tool | Description |
+|------|-------------|
+| `network_scap_report(target?)` | Generate SCAP-compliant results (XCCDF, OVAL, CPE) |
+| `network_cis_check(target, known_services?)` | Run CIS benchmark assessment |
+| `network_asset_inventory()` | NIST CSF-aligned asset inventory with risk scoring |
+| `network_zero_trust_assess()` | Zero Trust posture assessment (NIST 800-207/DISA ZTA) |
+| `network_compliance_map(include_cis?)` | Map findings to NIST 800-53 controls |
+| `network_vuln_prioritize(vulns_json)` | Defense-grade vulnerability prioritization (CVSS+SSVC+KEV) |
+| `network_generate_poam()` | Generate Plan of Action & Milestones |
 
 ### Utilities
 
@@ -346,11 +410,19 @@ pytest tests/test_utils.py -v
 
 ```
 src/network_scanner_mcp/
-├── __init__.py       # Package exports
-├── server.py         # MCP server with tools
-├── scanner.py        # Scanning functionality
-├── alert_daemon.py   # Continuous monitoring daemon
-└── utils.py          # Shared utilities
+├── __init__.py                  # Package exports
+├── server.py                    # MCP server with tools
+├── scanner.py                   # Scanning functionality
+├── alert_daemon.py              # Continuous monitoring daemon
+├── utils.py                     # Shared utilities
+└── compliance/                  # Defense & federal compliance
+    ├── __init__.py              # Compliance module exports
+    ├── scap_output.py           # SCAP output (XCCDF, OVAL, CPE)
+    ├── cis_benchmarks.py        # CIS Benchmark checking
+    ├── nist_csf_inventory.py    # NIST CSF asset inventory
+    ├── zero_trust.py            # Zero Trust assessment (800-207)
+    ├── nist_800_53.py           # NIST 800-53 control mapping + POA&M
+    └── vuln_scoring.py          # CVSS v3.1, SSVC, KEV scoring
 ```
 
 ## Requirements
@@ -366,6 +438,19 @@ src/network_scanner_mcp/
 - `mpv` - Optional for audio playback
 
 ## Changelog
+
+### v0.3.0
+
+- Added SCAP-compliant output (XCCDF 1.2, OVAL 5.11, CPE 2.3)
+- Added CIS Benchmark checking with 8 network device hardening checks
+- Added NIST CSF asset inventory (ID.AM-1 through ID.AM-5) with risk scoring
+- Added Zero Trust Architecture assessment (NIST 800-207, DISA ZTA, CISA ZT Maturity Model)
+- Added NIST SP 800-53 Rev. 5 control mapping (7 control families)
+- Added POA&M generation per NIST SP 800-37 Rev. 2
+- Added multi-framework vulnerability scoring (CVSS v3.1, SSVC, KEV, mission impact)
+- 7 new MCP tools for defense and federal compliance
+- Asset classification: PUBLIC, INTERNAL, CONFIDENTIAL, RESTRICTED
+- DoD ZTA Reference Architecture and OMB M-22-09 alignment
 
 ### v0.2.0
 
