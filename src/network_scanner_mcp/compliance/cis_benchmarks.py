@@ -509,27 +509,10 @@ async def _check_snmp_community_strings(ip: str) -> CISCheckResult:
     community strings (public, private, community).
     """
     start = datetime.now(timezone.utc)
-    snmp_open = await _check_port_open(ip, 161, timeout=2.0)
 
-    if not snmp_open:
-        elapsed = (datetime.now(timezone.utc) - start).total_seconds() * 1000
-        return CISCheckResult(
-            benchmark_id="CIS-ND-2.2",
-            title="Ensure SNMP uses non-default community strings",
-            description="SNMP community strings must not use default values.",
-            level=CISLevel.L1,
-            status=ComplianceStatus.NOT_APPLICABLE,
-            rationale="SNMP service not detected on port 161/UDP.",
-            remediation="N/A - SNMP not running.",
-            severity="high",
-            evidence="SNMP port 161 is closed.",
-            cis_control_id="CIS Control 4.8",
-            nist_mapping=["CM-7", "IA-5", "SC-8"],
-            check_duration_ms=elapsed,
-        )
-
-    # SNMP v1/v2c community string check using raw UDP
-    # We send SNMPv2c GET requests with common default community strings
+    # SNMP uses UDP port 161, not TCP. We probe with default community strings
+    # directly -- if any respond, the service is present AND has weak credentials.
+    # If none respond, the service is either not running or properly secured.
     default_communities = ["public", "private", "community", "snmp", "admin", "default"]
     weak_found: list[str] = []
 
@@ -602,10 +585,13 @@ async def _check_snmp_community_strings(ip: str) -> CISCheckResult:
         description="SNMP community strings must not use default values.",
         level=CISLevel.L1,
         status=ComplianceStatus.PASS,
-        rationale="No default community strings accepted.",
+        rationale="No default community strings accepted on UDP port 161.",
         remediation="No action required. Consider migrating to SNMPv3.",
         severity="high",
-        evidence="SNMP is active but default community strings rejected.",
+        evidence=(
+            "No default SNMP community strings accepted via UDP/161. "
+            "Service may not be running, or community strings have been changed."
+        ),
         cis_control_id="CIS Control 4.8",
         nist_mapping=["CM-7", "IA-5", "SC-8"],
         check_duration_ms=elapsed,

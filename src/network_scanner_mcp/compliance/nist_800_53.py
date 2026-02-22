@@ -364,31 +364,45 @@ def map_findings_to_controls(
 
 def _assess_ca7(devices: list[dict], total_devices: int) -> ControlMapping:
     """Assess CA-7: Continuous Monitoring."""
-    # Network scanning IS continuous monitoring
+    # Network scanning contributes to continuous monitoring but does not
+    # fully satisfy CA-7 on its own. CA-7 requires a comprehensive
+    # continuous monitoring strategy including metrics, reporting, and
+    # response actions across all system components -- not just network scanning.
     evidence_parts = [
         f"Network scanning capability operational covering {total_devices} devices",
-        f"ARP-based device discovery active",
-        f"Port scanning and service detection implemented",
+        "ARP-based device discovery active",
+        "Port scanning and service detection implemented",
+    ]
+
+    gaps = [
+        "A single network scanner contributes to but does not fully satisfy CA-7. "
+        "Full compliance requires: organization-defined monitoring metrics (CA-7a/b), "
+        "ongoing security control assessments (CA-7c/d), status reporting to "
+        "designated officials (CA-7e), and defined response actions (CA-7f).",
     ]
 
     if total_devices > 0:
         return ControlMapping(
             finding_id="CA-7-001",
-            finding_description="Continuous monitoring via automated network scanning",
-            finding_severity=FindingSeverity.LOW,
+            finding_description=(
+                "Network scanning provides partial continuous monitoring coverage. "
+                "Additional monitoring capabilities required for full CA-7 satisfaction."
+            ),
+            finding_severity=FindingSeverity.MODERATE,
             mapped_controls=["CA-7"],
-            control_status="satisfied",
+            control_status="partially_satisfied",
             evidence="; ".join(evidence_parts),
+            gaps=gaps,
         )
 
     return ControlMapping(
         finding_id="CA-7-001",
         finding_description="Continuous monitoring capability present but no devices scanned",
-        finding_severity=FindingSeverity.MODERATE,
+        finding_severity=FindingSeverity.HIGH,
         mapped_controls=["CA-7"],
-        control_status="partially_satisfied",
+        control_status="not_satisfied",
         evidence="Scanner operational but device discovery incomplete",
-        gaps=["Expand scan coverage to include all network segments"],
+        gaps=gaps + ["Expand scan coverage to include all network segments"],
     )
 
 
@@ -568,8 +582,12 @@ def _assess_sc7(devices: list[dict], topology: dict) -> ControlMapping:
 
 def _assess_si4(devices: list[dict], new_devices: list[dict]) -> ControlMapping:
     """Assess SI-4: System Monitoring."""
+    # Network scanning contributes to SI-4 but cannot fully satisfy it alone.
+    # SI-4 requires attack detection, indicator identification, unauthorized
+    # connection detection, monitoring data protection, and heightened
+    # monitoring in response to threat indicators.
     evidence_parts = [
-        "Network scanning provides system monitoring capability",
+        "Network scanning provides partial system monitoring capability",
         "New device detection operational",
         "Service monitoring via port scanning",
     ]
@@ -579,14 +597,26 @@ def _assess_si4(devices: list[dict], new_devices: list[dict]) -> ControlMapping:
             f"New device detection triggered: {len(new_devices)} device(s) identified"
         )
 
-    # Scanner presence satisfies monitoring requirements
+    gaps = [
+        "A network scanner alone does not fully satisfy SI-4. Full compliance "
+        "requires: real-time attack detection (SI-4a), indicators of potential "
+        "attacks identification (SI-4b), unauthorized connection detection "
+        "(SI-4c), monitoring information protection (SI-4e), and heightened "
+        "monitoring when threat indicators exist (SI-4f). Consider integrating "
+        "IDS/IPS, SIEM, and EDR solutions.",
+    ]
+
     return ControlMapping(
         finding_id="SI-4-001",
-        finding_description="System monitoring via network scanning",
-        finding_severity=FindingSeverity.LOW,
+        finding_description=(
+            "Network scanning contributes to system monitoring but does not "
+            "fully satisfy SI-4 requirements on its own."
+        ),
+        finding_severity=FindingSeverity.MODERATE,
         mapped_controls=["SI-4"],
-        control_status="satisfied",
+        control_status="partially_satisfied",
         evidence="; ".join(evidence_parts),
+        gaps=gaps,
     )
 
 

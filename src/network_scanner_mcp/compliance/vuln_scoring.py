@@ -14,11 +14,17 @@ References:
     - NIST NVD: https://nvd.nist.gov/
 """
 
+import json
 import logging
 import math
+import os
+import time
+import urllib.request
+import urllib.error
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from enum import Enum
+from pathlib import Path
 from typing import Any, Optional
 
 logger = logging.getLogger("network-scanner")
@@ -62,9 +68,10 @@ class Scope(str, Enum):
 
 
 class Impact(str, Enum):
-    """CVSS v3.1 CIA Impact values."""
+    """CVSS v3.1 CIA Impact values and environmental requirement levels."""
     NONE = "NONE"     # 0.00
     LOW = "LOW"       # 0.22
+    MEDIUM = "MEDIUM" # Used for environmental CIA requirement (modifier 1.0)
     HIGH = "HIGH"     # 0.56
 
 
@@ -128,6 +135,7 @@ _UI_VALUES = {
 _IMPACT_VALUES = {
     Impact.NONE: 0.00,
     Impact.LOW: 0.22,
+    Impact.MEDIUM: 0.22,  # MEDIUM is used for environmental requirements, not base impact
     Impact.HIGH: 0.56,
 }
 
@@ -191,7 +199,7 @@ class CVSSv31Vector:
         }
         ui_map = {UserInteraction.NONE: "N", UserInteraction.REQUIRED: "R"}
         s_map = {Scope.UNCHANGED: "U", Scope.CHANGED: "C"}
-        i_map = {Impact.NONE: "N", Impact.LOW: "L", Impact.HIGH: "H"}
+        i_map = {Impact.NONE: "N", Impact.LOW: "L", Impact.MEDIUM: "L", Impact.HIGH: "H"}
 
         parts = [
             "CVSS:3.1",
@@ -279,7 +287,11 @@ def compute_cvss_environmental_score(vector: CVSSv31Vector) -> float:
     ar = _IMPACT_VALUES.get(vector.avail_requirement, 0.56)
 
     # Normalize requirements (0.5 for LOW, 1.0 for MEDIUM, 1.5 for HIGH)
-    req_map = {Impact.NONE: 0.5, Impact.LOW: 0.5, Impact.HIGH: 1.5}
+    # Impact.LOW maps to CVSS "Low" requirement (0.5)
+    # Impact.HIGH maps to CVSS "High" requirement (1.5)
+    # Note: CVSS spec uses a separate "Medium" value (1.0) but the Impact enum
+    # is reused here. Impact.NONE serves as the "not defined" / medium default.
+    req_map = {Impact.NONE: 0.5, Impact.LOW: 0.5, Impact.MEDIUM: 1.0, Impact.HIGH: 1.5}
     mcr = req_map.get(vector.conf_requirement, 1.0)
     mir = req_map.get(vector.integ_requirement, 1.0)
     mar = req_map.get(vector.avail_requirement, 1.0)
@@ -509,12 +521,29 @@ def compute_ssvc_decision(
 # KEV (Known Exploited Vulnerabilities) Cross-Reference
 # ===========================================================================
 
-# Static KEV entries for common network service vulnerabilities.
-# In production, this would be populated from the CISA KEV catalog
-# (https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
-# via periodic synchronization.
+# ---------------------------------------------------------------------------
+# KEV Feed Configuration and Caching
+# ---------------------------------------------------------------------------
 
-_KEV_DATABASE: dict[str, dict[str, Any]] = {
+_CISA_KEV_URL = "https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json"
+
+# Default cache TTL: 24 hours (configurable via KEV_CACHE_TTL_SECONDS env var)
+_KEV_CACHE_TTL_SECONDS = int(os.environ.get("KEV_CACHE_TTL_SECONDS", "86400"))
+
+# Cache location
+_KEV_CACHE_DIR = Path(os.environ.get(
+    "KEV_CACHE_DIR",
+    os.path.expanduser("~/.cache/network-scanner-mcp"),
+))
+_KEV_CACHE_FILE = _KEV_CACHE_DIR / "kev_catalog.json"
+
+# In-memory cache to avoid repeated disk reads within the same process
+_kev_memory_cache: dict[str, dict[str, Any]] | None = None
+_kev_memory_cache_time: float = 0.0
+
+# Fallback static KEV entries for when the live feed is unavailable.
+# These cover high-profile network-relevant CVEs to provide baseline coverage.
+_KEV_FALLBACK: dict[str, dict[str, Any]] = {
     "CVE-2021-44228": {
         "name": "Apache Log4j Remote Code Execution",
         "vendor": "Apache",
@@ -617,6 +646,155 @@ _KEV_DATABASE: dict[str, dict[str, Any]] = {
     },
 }
 
+# Known service keywords to infer from product names (for live KEV entries
+# that don't have a pre-mapped services list)
+_PRODUCT_SERVICE_MAP: dict[str, list[str]] = {
+    "exchange": ["https", "smtp"],
+    "iis": ["http", "https"],
+    "apache": ["http", "https"],
+    "nginx": ["http", "https"],
+    "tomcat": ["http", "https"],
+    "log4j": ["http", "https", "elasticsearch"],
+    "openssh": ["ssh"],
+    "bind": ["dns"],
+    "postfix": ["smtp"],
+    "exim": ["smtp"],
+    "mysql": ["mysql"],
+    "postgresql": ["postgresql"],
+    "mongodb": ["mongodb"],
+    "redis": ["redis"],
+    "elasticsearch": ["elasticsearch"],
+    "rdp": ["rdp"],
+    "remote desktop": ["rdp"],
+    "vnc": ["vnc"],
+    "samba": ["smb"],
+    "smb": ["smb"],
+    "fortios": ["https"],
+    "pan-os": ["https"],
+    "junos": ["https", "ssh"],
+    "ios": ["https", "ssh"],
+    "confluence": ["http", "https"],
+    "jira": ["http", "https"],
+    "gitlab": ["http", "https"],
+}
+
+
+def _fetch_live_kev_catalog() -> dict[str, dict[str, Any]] | None:
+    """
+    Fetch the live CISA KEV catalog and return it as a dict keyed by CVE ID.
+
+    Returns None if the fetch fails.
+    """
+    try:
+        req = urllib.request.Request(
+            _CISA_KEV_URL,
+            headers={"User-Agent": "network-scanner-mcp/1.0"},
+        )
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            raw = json.loads(resp.read().decode("utf-8"))
+
+        vulns = raw.get("vulnerabilities", [])
+        catalog: dict[str, dict[str, Any]] = {}
+
+        for vuln in vulns:
+            cve_id = vuln.get("cveID", "")
+            if not cve_id:
+                continue
+
+            product_lower = (vuln.get("product") or "").lower()
+            vendor_lower = (vuln.get("vendorProject") or "").lower()
+
+            # Infer services from product name
+            services: list[str] = []
+            for keyword, svc_list in _PRODUCT_SERVICE_MAP.items():
+                if keyword in product_lower or keyword in vendor_lower:
+                    services.extend(svc_list)
+            services = list(set(services))
+
+            catalog[cve_id] = {
+                "name": vuln.get("vulnerabilityName", ""),
+                "vendor": vuln.get("vendorProject", ""),
+                "product": vuln.get("product", ""),
+                "date_added": vuln.get("dateAdded", ""),
+                "due_date": vuln.get("dueDate", ""),
+                "required_action": vuln.get("requiredAction", ""),
+                "known_ransomware": vuln.get("knownRansomwareCampaignUse", "Unknown") == "Known",
+                "services": services,
+            }
+
+        logger.info(f"Fetched live CISA KEV catalog: {len(catalog)} entries")
+        return catalog
+
+    except (urllib.error.URLError, json.JSONDecodeError, OSError, Exception) as exc:
+        logger.warning(f"Failed to fetch live CISA KEV catalog: {exc}")
+        return None
+
+
+def _save_kev_cache(catalog: dict[str, dict[str, Any]]) -> None:
+    """Save KEV catalog to disk cache."""
+    try:
+        _KEV_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+        cache_data = {
+            "timestamp": time.time(),
+            "catalog": catalog,
+        }
+        _KEV_CACHE_FILE.write_text(json.dumps(cache_data), encoding="utf-8")
+    except OSError as exc:
+        logger.warning(f"Failed to save KEV cache: {exc}")
+
+
+def _load_kev_cache() -> dict[str, dict[str, Any]] | None:
+    """Load KEV catalog from disk cache if it exists and is not expired."""
+    try:
+        if not _KEV_CACHE_FILE.exists():
+            return None
+        cache_data = json.loads(_KEV_CACHE_FILE.read_text(encoding="utf-8"))
+        cached_time = cache_data.get("timestamp", 0)
+        if time.time() - cached_time > _KEV_CACHE_TTL_SECONDS:
+            return None  # Cache expired
+        return cache_data.get("catalog")
+    except (OSError, json.JSONDecodeError, Exception):
+        return None
+
+
+def get_kev_database() -> dict[str, dict[str, Any]]:
+    """
+    Get the KEV database, attempting live fetch with disk and memory caching.
+
+    Resolution order:
+        1. In-memory cache (if valid TTL)
+        2. Disk cache (if valid TTL)
+        3. Live fetch from CISA (saved to both caches)
+        4. Fallback to static entries
+    """
+    global _kev_memory_cache, _kev_memory_cache_time
+
+    # Check in-memory cache
+    if _kev_memory_cache is not None:
+        if time.time() - _kev_memory_cache_time < _KEV_CACHE_TTL_SECONDS:
+            return _kev_memory_cache
+
+    # Check disk cache
+    disk_cache = _load_kev_cache()
+    if disk_cache is not None:
+        _kev_memory_cache = disk_cache
+        _kev_memory_cache_time = time.time()
+        return disk_cache
+
+    # Fetch live
+    live_catalog = _fetch_live_kev_catalog()
+    if live_catalog is not None:
+        _kev_memory_cache = live_catalog
+        _kev_memory_cache_time = time.time()
+        _save_kev_cache(live_catalog)
+        return live_catalog
+
+    # Fallback to static entries
+    logger.warning("Using fallback static KEV database (10 entries)")
+    _kev_memory_cache = _KEV_FALLBACK
+    _kev_memory_cache_time = time.time()
+    return _KEV_FALLBACK
+
 
 def check_kev_exposure(
     services: list[str],
@@ -642,7 +820,8 @@ def check_kev_exposure(
     vendor_lower = vendor.lower()
     banner_text = " ".join((banners or [])).lower()
 
-    for cve_id, kev_entry in _KEV_DATABASE.items():
+    kev_db = get_kev_database()
+    for cve_id, kev_entry in kev_db.items():
         kev_services = set(kev_entry.get("services", []))
         product_lower = kev_entry.get("product", "").lower()
         vendor_entry = kev_entry.get("vendor", "").lower()

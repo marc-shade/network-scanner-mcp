@@ -533,10 +533,20 @@ def generate_oval_definitions(
     schema_version: str = "5.11.2",
 ) -> str:
     """
-    Generate OVAL 5.11 compliant definitions document.
+    Generate OVAL 5.11 structural definitions document for documentation purposes.
 
-    Each check is translated into an OVAL ``<definition>`` with associated
-    ``<test>``, ``<object>``, and ``<state>`` elements.
+    Produces OVAL XML that represents the compliance checks in OVAL schema format.
+    The output is **structural/demonstrative** -- it captures check definitions,
+    objects, and expected states in valid OVAL XML, but is not intended for direct
+    execution by SCAP scanning tools (e.g., OpenSCAP, SCAP Workbench). The
+    definitions use ``textfilecontent54`` objects that reference the scanner's own
+    results data rather than live system files, so an external OVAL interpreter
+    would not be able to evaluate them independently.
+
+    Use this output for:
+        - Compliance documentation and audit evidence
+        - SCAP data-stream assembly where OVAL serves as a reference artifact
+        - Mapping checks to OVAL-compatible structure for toolchain integration
 
     Args:
         checks: List of check dictionaries. Each must contain:
@@ -557,6 +567,11 @@ def generate_oval_definitions(
 
     Returns:
         Pretty-printed OVAL 5.11 XML string with XML declaration.
+
+    Note:
+        These definitions are structural representations of network scanner
+        checks, not executable OVAL content. They reference scan result data
+        paths rather than live system paths.
     """
     now = datetime.now(timezone.utc).isoformat()
 
@@ -614,10 +629,8 @@ def generate_oval_definitions(
         criterion.set("comment", check.get("title", check_id))
 
         # --- <test> ---
-        if check_type == "port_check":
-            test_elem = ET.SubElement(tests, f"{{{OVAL_IND_NS}}}textfilecontent54_test")
-        else:
-            test_elem = ET.SubElement(tests, f"{{{OVAL_IND_NS}}}variable_test")
+        # All checks use textfilecontent54 referencing scanner result files
+        test_elem = ET.SubElement(tests, f"{{{OVAL_IND_NS}}}textfilecontent54_test")
 
         test_elem.set("id", tst_id)
         test_elem.set("version", "1")
@@ -630,35 +643,42 @@ def generate_oval_definitions(
         ste_ref.set("state_ref", ste_id)
 
         # --- <object> ---
-        if check_type == "port_check":
-            obj_elem = ET.SubElement(objects, f"{{{OVAL_IND_NS}}}textfilecontent54_object")
-        else:
-            obj_elem = ET.SubElement(objects, f"{{{OVAL_IND_NS}}}variable_object")
+        obj_elem = ET.SubElement(objects, f"{{{OVAL_IND_NS}}}textfilecontent54_object")
 
         obj_elem.set("id", obj_id)
         obj_elem.set("version", "1")
         obj_elem.set("comment", f"Object for {check_id}")
 
-        # Object content varies by check type
+        # Object content varies by check type.
+        # Note: These objects describe the scanner's own result data structure,
+        # not live system files. They are structural OVAL representations.
         if check_type == "port_check":
             filepath_el = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}filepath")
-            filepath_el.text = "/dev/null"
+            target_ip = check.get("target_ip", "unknown")
+            port = check.get("port", 0)
+            # Reference the scan results data for this check
+            filepath_el.text = f"/var/lib/network-scanner/results/{target_ip}/port_scan.log"
             pattern_el = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}pattern")
             pattern_el.set("operation", "pattern match")
-            port = check.get("port", 0)
-            pattern_el.text = f"port:{port}"
+            pattern_el.text = f"^{port}/tcp\\s+open"
             instance_el = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}instance")
             instance_el.set("datatype", "int")
             instance_el.text = "1"
         else:
-            var_ref = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}var_ref")
-            var_ref.text = f"oval:network-scanner:var:{idx}"
+            # For config/service/credential checks, reference the check result file
+            filepath_el = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}filepath")
+            target_ip = check.get("target_ip", "unknown")
+            filepath_el.text = f"/var/lib/network-scanner/results/{target_ip}/{check_id}.log"
+            pattern_el = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}pattern")
+            pattern_el.set("operation", "pattern match")
+            actual = check.get("actual_value", ".*")
+            pattern_el.text = actual
+            instance_el = ET.SubElement(obj_elem, f"{{{OVAL_IND_NS}}}instance")
+            instance_el.set("datatype", "int")
+            instance_el.text = "1"
 
         # --- <state> ---
-        if check_type == "port_check":
-            state_elem = ET.SubElement(states, f"{{{OVAL_IND_NS}}}textfilecontent54_state")
-        else:
-            state_elem = ET.SubElement(states, f"{{{OVAL_IND_NS}}}variable_state")
+        state_elem = ET.SubElement(states, f"{{{OVAL_IND_NS}}}textfilecontent54_state")
 
         state_elem.set("id", ste_id)
         state_elem.set("version", "1")

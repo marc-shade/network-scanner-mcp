@@ -135,10 +135,16 @@ def _assess_identity_pillar(network_data: dict[str, Any]) -> PillarAssessment:
 
         if "ldap" in services or "ldaps" in services:
             has_ldap = True
+        # RADIUS uses UDP 1812/1813; port-based detection from TCP scan is
+        # unreliable. A proper check would send a RADIUS Access-Request.
+        # This is a heuristic based on open port observation.
         if any(p.get("port") in (1812, 1813) for p in ports if p.get("state") == "open"):
             has_radius = True
+        # Port 8200 is commonly used by HashiCorp Vault, which may provide
+        # PKI services. This is a heuristic -- the port could host other
+        # applications. Not definitive proof of PKI infrastructure.
         if any(p.get("port") in (8200, 8201) for p in ports if p.get("state") == "open"):
-            has_pki = True  # Vault/PKI service indicator
+            has_pki = True
         if "ssh" in services:
             ssh_devices += 1
             # Check for SSHv1 or password auth indicators in banner
@@ -171,7 +177,7 @@ def _assess_identity_pillar(network_data: dict[str, Any]) -> PillarAssessment:
         score += 20.0
         findings.append({
             "type": "positive",
-            "detail": "RADIUS/AAA service detected for network device authentication",
+            "detail": "RADIUS/AAA service likely present (port 1812/1813 open; heuristic detection)",
         })
     else:
         recommendations.append(
@@ -183,7 +189,7 @@ def _assess_identity_pillar(network_data: dict[str, Any]) -> PillarAssessment:
         score += 15.0
         findings.append({
             "type": "positive",
-            "detail": "PKI/certificate service detected",
+            "detail": "Possible PKI/certificate service detected (port 8200 open; may be HashiCorp Vault or other service)",
         })
     else:
         recommendations.append(
@@ -368,7 +374,6 @@ def _assess_device_pillar(network_data: dict[str, Any]) -> PillarAssessment:
         "ZTA requires continuous device posture assessment."
     )
 
-    score += 10.0  # Baseline for having scanning capability
     score = max(min(score, 100.0), 0.0)
     maturity = _score_to_maturity(score)
 
@@ -512,13 +517,6 @@ def _assess_network_pillar(network_data: dict[str, Any]) -> PillarAssessment:
             "detail": "No common lateral movement services detected",
         })
 
-    # Network monitoring (we are the monitoring tool)
-    score += 15.0
-    findings.append({
-        "type": "positive",
-        "detail": "Network scanning and monitoring capability operational",
-    })
-
     recommendations.append(
         "Deploy network traffic analysis (NTA/NDR) for continuous monitoring. "
         "Implement software-defined perimeter (SDP) for dynamic access control."
@@ -639,8 +637,6 @@ def _assess_application_pillar(network_data: dict[str, Any]) -> PillarAssessment
         "Enforce least-privilege access at the application layer.",
     ])
 
-    # Baseline score for having application visibility
-    score += 15.0
     score = max(min(score, 100.0), 0.0)
     maturity = _score_to_maturity(score)
 
@@ -772,7 +768,6 @@ def _assess_data_pillar(network_data: dict[str, Any]) -> PillarAssessment:
             "Implement access logging and DLP policies."
         )
 
-    score += 15.0  # Baseline for data visibility
     score = max(min(score, 100.0), 0.0)
     maturity = _score_to_maturity(score)
 
